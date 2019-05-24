@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //import locales
-import '../profile.dart';
+import '../myproducts/myproducts.dart';
 import '../products.dart';
 
 class SideBar extends StatelessWidget {
@@ -23,10 +23,10 @@ class SideBar extends StatelessWidget {
           },
         ),
         ListTile(
-          title: Text('My profile'),
+          title: Text('My products'),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => ProfilePage()));
+                builder: (BuildContext context) => MyProductsPage()));
           },
         ),
         ListTile(
