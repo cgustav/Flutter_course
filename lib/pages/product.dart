@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class ProductPage extends StatelessWidget {
   final String title;
@@ -9,6 +10,11 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      onWillPop:(){
+        print('Back Button Pressed');
+        Navigator.pop(context, false); //we dont want to delete //customized pop
+        return Future.value(false); //to not use the default pop 
+      } ,
       child: Scaffold(
         appBar: AppBar(
           title: Text(title),
