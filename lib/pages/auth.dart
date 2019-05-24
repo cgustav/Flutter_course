@@ -14,13 +14,14 @@ class AuthPage extends StatelessWidget {
       ),
       body: Center(
         child: RaisedButton(
-          child: Text('Login'),
+          child: Text('Login'), 
           onPressed: () {
             // Replacement simply means the current page
             // completely gets replaced with this one.
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => ProductsPage()),
+              MaterialPageRoute(
+                  builder: (BuildContext context) => ProductsPage()),
             );
           },
         ),
