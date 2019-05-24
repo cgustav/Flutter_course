@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 //import locales
-import '../myproducts/myproducts.dart';
-import '../products.dart';
+//import '../myproducts/myproducts.dart';
+//import '../products.dart';
 
 class SideBar extends StatelessWidget {
   @override
@@ -18,15 +18,17 @@ class SideBar extends StatelessWidget {
         ListTile(
           title: Text('Home'),
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => ProductsPage()));
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (BuildContext context) => ProductsPage()));
+            Navigator.of(context).pushNamed('/');
           },
         ),
         ListTile(
           title: Text('My products'),
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => MyProductsPage()));
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (BuildContext context) => MyProductsPage()));
+          Navigator.of(context).pushNamed('/myproducts');
           },
         ),
         ListTile(

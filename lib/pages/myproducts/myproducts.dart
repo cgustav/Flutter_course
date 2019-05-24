@@ -24,7 +24,7 @@ class MyProductsPage extends StatelessWidget {
         child: Scaffold(
           drawer: SideBar(),
           appBar: AppBar(
-            title: Text('Profile Settings'),
+            title: Text('My Products'),
             bottom: TabBar(
               tabs: <Widget>[
                 Tab(

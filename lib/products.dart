@@ -44,12 +44,13 @@ class Products extends StatelessWidget {
                       color: Colors.white,
                     )),
                 onPressed: () => {
-                      Navigator.push<bool>(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProductPage(
-                                      products[index]['title'],
-                                      products[index]['image'])))
+                      //Navigator.push<bool>(
+                      //context,
+                      // MaterialPageRoute(
+                      //     builder: (context) => ProductPage(
+                      //         products[index]['title'],
+                      //         products[index]['image'])))
+                      Navigator.pushNamed<bool>(context, '/product/'+ index.toString())
                           .then((bool value) {
                         if (value) {
                           deleteProduct(index);
