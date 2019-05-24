@@ -32,12 +32,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _deleteProduct(int index){
+  void _deleteProduct(int index) {
     setState(() {
       _products.removeAt(index);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +48,13 @@ class _MyAppState extends State<MyApp> {
           accentColor: Colors.deepPurple),
       //home: AuthPage(),
       routes: {
-        '/': (BuildContext context) => ProductsPage(_products, _addProduct, _deleteProduct),
+        '/': (BuildContext context) =>
+            ProductsPage(_products, _addProduct, _deleteProduct),
         '/myproducts': (BuildContext context) => MyProductsPage()
       },
       onGenerateRoute: (RouteSettings settings) {
         //This allow us to pass arguments through name routes
+        //for example /product/1
         final List<String> pathElements = settings.name.split('/');
 
         //Invalid name route
@@ -72,6 +73,16 @@ class _MyAppState extends State<MyApp> {
         }
 
         //
+      },
+      onUnknownRoute: (RouteSettings settings) {
+        //it is executed inmediately after onGenerateRoute fails
+        //if we try to go to a non existing page (for some reason)
+        //the app automatically will redirect the client to the 
+        //home page.
+        
+        return MaterialPageRoute(
+            builder: (BuildContext context) =>
+                ProductsPage(_products, _addProduct, _deleteProduct));
       },
     );
   }
