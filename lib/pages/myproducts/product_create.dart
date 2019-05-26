@@ -88,6 +88,15 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
               textColor: Colors.white, //primary
               onPressed: _submitForm
               )
+          //Notes: About Customized Button
+          //   -> It contains tons of events, it's awesome!
+          // GestureDetector(child:  
+          //   Container(color:Colors.green,
+          //     padding: EdgeInsets.all(15.0),
+          //     child: Text('My Button'),)
+          // ,
+          // )
+         
         ],
       ),
     );

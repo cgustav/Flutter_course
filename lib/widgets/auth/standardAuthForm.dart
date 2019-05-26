@@ -46,7 +46,7 @@ class StandardAuthForm extends StatelessWidget {
 
   Widget _buildSubmittionButton() {
     return RaisedButton(
-        color: Theme.of(context).accentColor,
+        //color: Theme.of(context).accentColor,
         textColor: Colors.white,
         child: Center(
           child: Text('LogIn'),
