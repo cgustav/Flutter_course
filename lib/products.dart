@@ -38,7 +38,7 @@ class Products extends StatelessWidget {
             //->margin top && bottom
             //  /margin:EdgeInsets.only(top: 10.0, bottom: 1.0),
             //  /Here you can specify 'manual' margin configuration
-            // 
+            //
             //->margin symmetrical (horizontal)
             // /margin:EdgeInsets.symmetric(horizontal: 25.0),
             // /You can control the margin size of the container
@@ -54,10 +54,20 @@ class Products extends StatelessWidget {
             //-> Additionaly you can use the Padding widget:
             //    /Padding(padding: EdgeInsets.only(top: 10.0),color: Colors.green,))
 
-            padding: EdgeInsets.only(top: 0.0),
+            padding: EdgeInsets.only(top: 10.0),
             //
-            color: Colors.green,
-            child: Center(child:Text(products[index]['title']),),),
+            //color: Colors.green,
+
+            child: Text(products[index]['title'],
+            //NOTES: Text Style & Fonts
+            //-> You can customize text styling and
+            //   other font configuration with the 
+            //   TextStyle widget 
+                style: TextStyle(
+                  fontSize: 26.0,
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -74,7 +84,8 @@ class Products extends StatelessWidget {
                       //     builder: (context) => ProductPage(
                       //         products[index]['title'],
                       //         products[index]['image'])))
-                      Navigator.pushNamed<bool>(context, '/product/'+ index.toString())
+                      Navigator.pushNamed<bool>(
+                          context, '/product/' + index.toString())
                       //     .then((bool value) {
                       //   if (value) {
                       //     deleteProduct(index);
