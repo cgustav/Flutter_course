@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 //local imports
 import '../home/products.dart';
-import 'standardAuthForm.dart';
+import '../../widgets/auth/standardAuthForm.dart';
 
 class AuthPage extends StatefulWidget {
   @override

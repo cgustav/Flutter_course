@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 //local
-import '../../product_manager.dart';
+//import './displayable/product_manager.dart';
 import '../shared/sideBar.dart';
+import '../../widgets/products/products.dart';
 
 class ProductsPage extends StatelessWidget {
-  final List<Map<String,dynamic>> products;
-
+  final List<Map<String, dynamic>> products;
 
   ProductsPage(this.products);
 
@@ -16,8 +16,15 @@ class ProductsPage extends StatelessWidget {
       drawer: SideBar(),
       appBar: AppBar(
         title: Text('Home'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {},
+          )
+        ],
       ),
-      body: ProductManager(products),
+      //body: ProductManager(products),
+      body: Products(products),
     );
   }
 }

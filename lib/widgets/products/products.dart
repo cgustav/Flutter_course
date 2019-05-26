@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './pages/product.dart';
+import './product.dart';
 
 class Products extends StatelessWidget {
   final List<Map<String, dynamic>> products;
@@ -116,8 +116,10 @@ class Products extends StatelessWidget {
                 ],
               )),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
+            padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.5),
+            margin: EdgeInsets.only(top: 10.0),
             decoration: BoxDecoration(
+
                 border: Border.all(color: Colors.grey, width: 1.0),
                 borderRadius: BorderRadius.circular(6.0)),
             child: Text('Union Square, San Francisco.'),
@@ -125,32 +127,51 @@ class Products extends StatelessWidget {
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
+              IconButton(
+                icon: Icon(Icons.info),
                 color: Theme.of(context).primaryColorDark,
-                //color: Colors.blueAccent,
-                child: Text('View Details',
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
-                onPressed: () => {
-                      //Navigator.push<bool>(
-                      //context,
-                      // MaterialPageRoute(
-                      //     builder: (context) => ProductPage(
-                      //         products[index]['title'],
-                      //         products[index]['image'])))
-                      Navigator.pushNamed<bool>(
-                          context, '/product/' + index.toString())
-                      //     .then((bool value) {
-                      //   if (value) {
-                      //     deleteProduct(index);
-                      //   }
-                      //   //print(value)
-                      // })
-                    },
-              )
+                onPressed: (){
+                  Navigator.pushNamed<bool>(context, '/product/' + index.toString());
+                },
+                iconSize: 30.0,
+            ),
+            IconButton(
+                icon: Icon(Icons.favorite_border),
+                color: Colors.red,
+                onPressed: (){
+                  //Navigator.pushNamed<bool>(context, '/product/' + index.toString());
+                },
+            ),
             ],
-          )
+          ),
+            //alignment: MainAxisAlignment.center,
+            // children: <Widget>[
+            //   FlatButton(
+            //     color: Theme.of(context).primaryColorDark,
+            //     //color: Colors.blueAccent,
+            //     child: Text('View Details',
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //         )),
+            //     onPressed: () => {
+            //           //Navigator.push<bool>(
+            //           //context,
+            //           // MaterialPageRoute(
+            //           //     builder: (context) => ProductPage(
+            //           //         products[index]['title'],
+            //           //         products[index]['image'])))
+            //           Navigator.pushNamed<bool>(
+            //               context, '/product/' + index.toString())
+            //           //     .then((bool value) {
+            //           //   if (value) {
+            //           //     deleteProduct(index);
+            //           //   }
+            //           //   //print(value)
+            //           // })
+            //         },
+            //   )
+            //],
+          //)
         ],
       ),
     );

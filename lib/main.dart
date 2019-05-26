@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import './pages/auth/auth.dart';
 import './pages/home/products.dart';
 import './pages/myproducts/myproducts.dart';
-import './pages/product.dart';
+import './widgets/products/product.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -64,9 +64,15 @@ class _MyAppState extends State<MyApp> {
           final int index = int.parse(pathElements[2]);
           //image url
           //title:_products[index],imageUrl:_products[index]
+          // Map<String,dynamic> item = {
+          //   'title':_products[index]['title'],
+          //   'description': _products[index]['description'],
+          //   'image': _products[index]['image'],
+          //   'price': _products[index]['price'],
+          // };
+
           return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(
-                  _products[index]['title'], _products[index]['image']));
+              builder: (BuildContext context) => ProductPage(_products[index]));
         }
 
         //

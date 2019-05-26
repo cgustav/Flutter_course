@@ -14,10 +14,17 @@ class SideBar extends StatelessWidget {
           //automaticallyImplyLeading just erase the hamburguer icon
           automaticallyImplyLeading: false,
           title: Text('Choose'),
+          //NOTE: Actions inside sidebar - looks pretty cool
+          // actions: <Widget>[
+          //   IconButton(
+          //     icon: Icon(Icons.favorite),
+          //     onPressed: () {},
+          //   )
+          // ],
         ),
         ListTile(
           title: Text('Home'),
-          leading:Icon(Icons.home),
+          leading: Icon(Icons.home),
           onTap: () {
             // Navigator.of(context).push(MaterialPageRoute(
             //     builder: (BuildContext context) => ProductsPage()));
@@ -26,16 +33,16 @@ class SideBar extends StatelessWidget {
         ),
         ListTile(
           title: Text('My products'),
-          leading:Icon(Icons.favorite),
+          leading: Icon(Icons.shop),
           onTap: () {
             // Navigator.of(context).push(MaterialPageRoute(
             //     builder: (BuildContext context) => MyProductsPage()));
-          Navigator.of(context).pushNamed('/myproducts');
+            Navigator.of(context).pushNamed('/myproducts');
           },
         ),
         ListTile(
             title: Text('Random Message'),
-            leading:Icon(Icons.warning),
+            leading: Icon(Icons.warning),
             onTap: () {
               showDialog(
                   context: context,
