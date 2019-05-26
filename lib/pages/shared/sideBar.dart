@@ -5,6 +5,45 @@ import 'package:flutter/material.dart';
 //import '../products.dart';
 
 class SideBar extends StatelessWidget {
+  //HELPERS
+  Widget _buildHomeTile(BuildContext context) {
+    return ListTile(
+        title: Text('Home'),
+        leading: Icon(Icons.home),
+        onTap: () => Navigator.of(context).pushNamed('/products'));
+  }
+
+  Widget _buildMyProductsTile(BuildContext context) {
+    return ListTile(
+        title: Text('My products'),
+        leading: Icon(Icons.shop),
+        onTap: () => Navigator.of(context).pushNamed('/myproducts'));
+  }
+
+  Widget _buildRandomMessageTile(BuildContext context) {
+    return ListTile(
+        title: Text('Random Message'),
+        leading: Icon(Icons.warning),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Danger!'),
+                  content: Text('Lifes too short to think about everything!'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                );
+              });
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,46 +61,12 @@ class SideBar extends StatelessWidget {
           //   )
           // ],
         ),
-        ListTile(
-          title: Text('Home'),
-          leading: Icon(Icons.home),
-          onTap: () {
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (BuildContext context) => ProductsPage()));
-            Navigator.of(context).pushNamed('/products');
-          },
-        ),
-        ListTile(
-          title: Text('My products'),
-          leading: Icon(Icons.shop),
-          onTap: () {
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (BuildContext context) => MyProductsPage()));
-            Navigator.of(context).pushNamed('/myproducts');
-          },
-        ),
-        ListTile(
-            title: Text('Random Message'),
-            leading: Icon(Icons.warning),
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Danger!'),
-                      content:
-                          Text('Lifes too short to think about everything!'),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    );
-                  });
-            }),
+        //Home
+        _buildHomeTile(context),
+        //My products
+        _buildMyProductsTile(context),
+        //Random
+        _buildRandomMessageTile(context)
       ],
     ));
   }

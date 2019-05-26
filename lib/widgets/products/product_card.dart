@@ -11,7 +11,6 @@ class ProductCard extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Card(
       child: Column(
         children: <Widget>[
