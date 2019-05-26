@@ -14,6 +14,7 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   String _email;
   String _password;
+  bool _acceptTerms = false;
   //Map<String,dynamic> _authenticated;
 
   @override
@@ -23,7 +24,8 @@ class _AuthPageState extends State<AuthPage> {
         title: Center(child: Text('Authentication')),
         backgroundColor: Theme.of(context).accentColor,
       ),
-      body: StandardAuthForm(context, _setEmail, _setPassword, _submittion),
+      body: StandardAuthForm(
+          context, _setEmail, _setPassword, _switchTerms, _submittion),
     );
   }
 
@@ -31,24 +33,30 @@ class _AuthPageState extends State<AuthPage> {
     setState(() {
       _email = email;
     });
-    print('Email is :' + _email);
+    //print('Email is :' + _email);
   }
 
   void _setPassword(String password) {
     setState(() {
       _password = password;
     });
-    print('Email is :' + _password);
+    //print('Password is :' + _password);
   }
 
-  void _submittion(BuildContext context){
+  void _switchTerms(bool value) {
+    setState(() {
+      _acceptTerms = value;
+    });
+  }
+
+  void _submittion(BuildContext context) {
     final Map<String, dynamic> credentials = {
-                'username': _email,
-                'password': _password,
+      'username': _email,
+      'password': _password,
     };
 
-    print('Authenticating... '+ credentials.toString());
+    print('Acepta terminos? :' + _acceptTerms.toString());
+    print('Authenticating... ' + credentials.toString());
     Navigator.pushReplacementNamed(context, '/products');
   }
-
 }

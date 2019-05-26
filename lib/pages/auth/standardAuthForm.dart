@@ -4,9 +4,11 @@ class StandardAuthForm extends StatelessWidget {
   final BuildContext context;
   final Function setEmail;
   final Function setPassword;
+  final Function switchTerms;
   final Function submittion;
 
-  StandardAuthForm(this.context, this.setEmail, this.setPassword, this.submittion);
+  StandardAuthForm(this.context, this.setEmail, this.setPassword,
+      this.switchTerms, this.submittion);
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,13 @@ class StandardAuthForm extends StatelessWidget {
               obscureText: true,
               onChanged: (String value) {
                 setPassword(value);
+              },
+            ),
+            SwitchListTile(
+              title: Text('Accept Terms.'),
+              value: false,
+              onChanged: (bool value) {
+                switchTerms(value);
               },
             ),
             SizedBox(
