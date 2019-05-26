@@ -32,7 +32,32 @@ class Products extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image.asset(products[index]['image']),
-          Text(products[index]['title']),
+          //SizedBox(height: 50.0,child: Container(color: Colors.green,)),
+          Container(
+            //NOTES: About margin
+            //->margin top && bottom
+            //  /margin:EdgeInsets.only(top: 10.0, bottom: 1.0),
+            //  /Here you can specify 'manual' margin configuration
+            // 
+            //->margin symmetrical (horizontal)
+            // /margin:EdgeInsets.symmetric(horizontal: 25.0),
+            // /You can control the margin size of the container
+            // /equally (to the left & to the right)
+            //
+            //-> or symmetrical (horizontal + vertical)
+            //margin: EdgeInsets.symmetric(vertical: 18.0, horizontal: 10.1),
+
+            margin: EdgeInsets.only(top: 0.0),
+
+            //NOTES: About padding
+            //-> the same as margin settings options
+            //-> Additionaly you can use the Padding widget:
+            //    /Padding(padding: EdgeInsets.only(top: 10.0),color: Colors.green,))
+
+            padding: EdgeInsets.only(top: 0.0),
+            //
+            color: Colors.green,
+            child: Center(child:Text(products[index]['title']),),),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
