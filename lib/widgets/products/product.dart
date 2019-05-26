@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+//ui-elements
+import '../../ui_elements/title_default.dart';
+
 class ProductPage extends StatelessWidget {
-  // final String title;
-  // final String imageUrl;
+
   final Map<String, dynamic> productItem;
 
   ProductPage(this.productItem);
-  //ProductPage(this.title, this.imageUrl);
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +36,7 @@ class ProductPage extends StatelessWidget {
                     //alignment: MainAxisAlignment.center,
                     //color: Colors.lightBlue,
                     padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      productItem['title'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Exo2',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 30.0,
-                        //color: Colors.grey.shade600),
-                      ),
-                    ),
+                    child: TitleDefault(productItem['title'])  
                   ),
                 )
               ],
