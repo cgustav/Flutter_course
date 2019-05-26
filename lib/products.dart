@@ -66,6 +66,7 @@ class Products extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 26.0,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Exo2'
                 )),
           ),
           ButtonBar(

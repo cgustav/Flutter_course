@@ -61,7 +61,7 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
                 'title': _titlevalue,
                 'description': _descriptionValue,
                 'price': _priceValue,
-                'image': 'assets/food.jpg'
+                'image': 'assets/img/food.jpg'
               };
               widget.addProduct(product);
               //Navigator.pushNamed(context, '/');
