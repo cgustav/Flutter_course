@@ -75,20 +75,18 @@ class Products extends StatelessWidget {
                 children: <Widget>[
                   //NOTES: About Expanded Widget
                   // -> It gives the widget which it wraps as much
-                  //    space in the row or column you're using it 
+                  //    space in the row or column you're using it
                   //    as possible.
-                  Flexible(
-                    //fit: FlexFit.tight,
-                    flex: 10,
-                    child: Text(products[index]['title'],
-                        //NOTES: Text Style & Fonts
-                        //-> You can customize text styling and
-                        //   other font configuration with the
-                        //   TextStyle widget
-                        style: TextStyle(
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Exo2'),)
+                  Text(
+                    products[index]['title'],
+                    //NOTES: Text Style & Fonts
+                    //-> You can customize text styling and
+                    //   other font configuration with the
+                    //   TextStyle widget
+                    style: TextStyle(
+                        fontSize: 26.0,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Exo2'),
                   ),
                   SizedBox(
                     width: 8.0,
@@ -102,9 +100,7 @@ class Products extends StatelessWidget {
                    *  which also fills the box. Finally there is the image, the precise 
                    *  alignment of which is controlled by the DecorationImage class.
                    */
-                  Expanded(
-                    flex: 10,
-                    child:Container(
+                  Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
                     /* NOTES: About BorderRadius & decoration properties
@@ -116,7 +112,7 @@ class Products extends StatelessWidget {
                       '\$' + products[index]['price'].toString(),
                       style: TextStyle(color: Colors.white),
                     ),
-                  ),)
+                  ),
                 ],
               )),
           Container(

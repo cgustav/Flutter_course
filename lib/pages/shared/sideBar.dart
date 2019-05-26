@@ -17,6 +17,7 @@ class SideBar extends StatelessWidget {
         ),
         ListTile(
           title: Text('Home'),
+          leading:Icon(Icons.home),
           onTap: () {
             // Navigator.of(context).push(MaterialPageRoute(
             //     builder: (BuildContext context) => ProductsPage()));
@@ -25,6 +26,7 @@ class SideBar extends StatelessWidget {
         ),
         ListTile(
           title: Text('My products'),
+          leading:Icon(Icons.favorite),
           onTap: () {
             // Navigator.of(context).push(MaterialPageRoute(
             //     builder: (BuildContext context) => MyProductsPage()));
@@ -33,6 +35,7 @@ class SideBar extends StatelessWidget {
         ),
         ListTile(
             title: Text('Random Message'),
+            leading:Icon(Icons.warning),
             onTap: () {
               showDialog(
                   context: context,
