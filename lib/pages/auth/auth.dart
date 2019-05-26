@@ -17,6 +17,7 @@ class _AuthPageState extends State<AuthPage> {
   bool _acceptTerms = false;
   //Map<String,dynamic> _authenticated;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
