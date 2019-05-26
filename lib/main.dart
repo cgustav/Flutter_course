@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 //local
 //import './product_manager.dart';
-import './pages/auth.dart';
+import './pages/auth/auth.dart';
 import './pages/home/products.dart';
 import './pages/myproducts/myproducts.dart';
 import './pages/product.dart';
@@ -18,25 +18,12 @@ void main() {
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyAppState();
   }
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Map<String, String>> _products = [];
-
-  void _addProduct(Map<String, String> product) {
-    setState(() {
-      _products.add(product);
-    });
-  }
-
-  void _deleteProduct(int index) {
-    setState(() {
-      _products.removeAt(index);
-    });
-  }
+  List<Map<String, dynamic>> _products = [];
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +35,20 @@ class _MyAppState extends State<MyApp> {
           accentColor: Colors.deepPurple),
       //home: AuthPage(),
       routes: {
-        '/': (BuildContext context) =>
-            ProductsPage(_products, _addProduct, _deleteProduct),
-        '/myproducts': (BuildContext context) => MyProductsPage()
+        //Later you can use the specified named routes with 
+        //PushNamed & PushReplacementNamed to navigate through
+        //APP views just using a simple string
+        '/': (BuildContext context) {
+          return AuthPage();
+        },
+        '/products': (BuildContext context) {
+          return ProductsPage(_products);
+        },
+        '/myproducts': (BuildContext context) {
+          return MyProductsPage(_addProduct, _deleteProduct);
+        }
       },
+      //exception
       onGenerateRoute: (RouteSettings settings) {
         //This allow us to pass arguments through name routes
         //for example /product/1
@@ -77,13 +74,32 @@ class _MyAppState extends State<MyApp> {
       onUnknownRoute: (RouteSettings settings) {
         //it is executed inmediately after onGenerateRoute fails
         //if we try to go to a non existing page (for some reason)
-        //the app automatically will redirect the client to the 
+        //the app automatically will redirect the client to the
         //home page.
-        
+
         return MaterialPageRoute(
             builder: (BuildContext context) =>
-                ProductsPage(_products, _addProduct, _deleteProduct));
+                //ProductsPage(_products, _addProduct, _deleteProduct));
+                ProductsPage(_products));
       },
     );
+
+    
   }
+
+  //CUSTOM METHODS
+
+  void _addProduct(Map<String, dynamic> product) {
+    setState(() {
+      _products.add(product);
+    });
+  }
+
+  void _deleteProduct(int index) {
+    setState(() {
+      _products.removeAt(index);
+    });
+  }
+
+
 }

@@ -20,7 +20,7 @@ class SideBar extends StatelessWidget {
           onTap: () {
             // Navigator.of(context).push(MaterialPageRoute(
             //     builder: (BuildContext context) => ProductsPage()));
-            Navigator.of(context).pushNamed('/');
+            Navigator.of(context).pushNamed('/products');
           },
         ),
         ListTile(

@@ -15,7 +15,10 @@ import '../myproducts/product_list.dart';
 // }
 
 class MyProductsPage extends StatelessWidget {
-  MyProductsPage();
+  final Function addProduct;
+  final Function deleteProduct;
+
+  MyProductsPage(this.addProduct, this.deleteProduct);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class MyProductsPage extends StatelessWidget {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[ProductCreateTab(), ProductListTab()],
+            children: <Widget>[ProductCreateTab(addProduct), ProductListTab()],
           ),
         ));
   }
