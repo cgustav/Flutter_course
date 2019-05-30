@@ -16,12 +16,13 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
   final Map<String, dynamic> _formData = {
     'title': null,
     'description': null,
-    'price': null
+    'price': null,
+    'image': 'assets/img/food.jpg'
   };
-  
-  String _titlevalue = '';
-  String _descriptionValue = '';
-  double _priceValue;
+
+  // String _titlevalue = '';
+  // String _descriptionValue = '';
+  // double _priceValue;
 
   //BUILD METHOD
 
@@ -107,9 +108,7 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
         }
       },
       onSaved: (String value) {
-        setState(() {
-          _titlevalue = value;
-        });
+          _formData['title'] = value;
       },
     );
   }
@@ -124,9 +123,7 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
         }
       },
       onSaved: (String value) {
-        setState(() {
-          _descriptionValue = value;
-        });
+          _formData['description'] = value;
       },
     );
   }
@@ -142,9 +139,7 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
         }
       },
       onSaved: (String value) {
-        setState(() {
-          _priceValue = double.parse(value);
-        });
+          _formData['price'] = double.parse(value);
       },
     );
   }
@@ -176,16 +171,9 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
       return;
     }
 
-    //_formKey.currentState.validate();
     _formKey.currentState.save();
 
-    final Map<String, dynamic> product = {
-      'title': _titlevalue,
-      'description': _descriptionValue,
-      'price': _priceValue,
-      'image': 'assets/img/food.jpg'
-    };
-    widget.addProduct(product);
+    widget.addProduct(_formData);
     Navigator.pushReplacementNamed(context, '/products');
   }
 
