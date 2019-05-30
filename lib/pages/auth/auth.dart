@@ -25,8 +25,7 @@ class _AuthPageState extends State<AuthPage> {
         title: Center(child: Text('Authentication')),
         backgroundColor: Theme.of(context).accentColor,
       ),
-      body: StandardAuthForm(
-          context, _setEmail, _setPassword, _switchTerms, _submittion),
+      body: StandardAuthForm(context),
     );
   }
 

@@ -32,8 +32,8 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
           brightness: Brightness.light,
           primarySwatch: Colors.deepOrange,
-          accentColor: Colors.deepPurple,
-          buttonColor: Colors.deepPurple,
+          accentColor: Colors.redAccent,
+          buttonColor: Colors.amber,
           //buttonTheme: ButtonThemeData(textTheme: TextTheme())
           ),
           
