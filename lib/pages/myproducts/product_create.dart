@@ -12,6 +12,7 @@ class ProductCreateTab extends StatefulWidget {
 }
 
 class _ProductCreateTabState extends State<ProductCreateTab> {
+  final GlobalKey<FormState> _formKey =  GlobalKey<FormState>(); 
   String _titlevalue = '';
   String _descriptionValue = '';
   double _priceValue;
@@ -19,41 +20,61 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
   //HELPERS
 
   Widget _buildTitleTextField() {
-    return TextField(
+    /* NOTE: About TextFormFields
+      - These are special text fields that can be
+        integrated into such a form
+      - By default it cannot support features like
+        onChange events since TxtFormFields can be
+        managed as a collective and therefore we can
+        manage the values of each field differently.
+      - Instead, these widgets can support the onsaved
+        event, which means, they trigger a certain function
+        every time a form is submitted.
+     */
+    return TextFormField(
       decoration: InputDecoration(labelText: 'Product title'),
-      onChanged: (String value) {
+      onSaved:(String value){
         setState(() {
-          _titlevalue = value;
+          _titlevalue =  value;
         });
-      },
-    );
-  }
-
-  Widget _buildPriceTextField() {
-    return TextField(
-      decoration: InputDecoration(labelText: 'Product price'),
-      keyboardType: TextInputType.number,
-      onChanged: (String value) {
-        setState(() {
-          _priceValue = double.parse(value);
-        });
+        //print('Title field saved.');
       },
     );
   }
 
   Widget _buildDescriptionTextField() {
-    return TextField(
+    return TextFormField(
       maxLines: 4,
       decoration: InputDecoration(labelText: 'Product description'),
-      onChanged: (String value) {
-        setState(() {
-          _descriptionValue = value;
-        });
+      onSaved:(String value){
+          setState(() {
+            _descriptionValue = value;
+          });
+      },
+    );
+  }
+
+  Widget _buildPriceTextField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Product price'),
+      keyboardType: TextInputType.number,
+      onSaved:(String value){
+          setState(() {
+            _priceValue = double.parse(value);
+          });
       },
     );
   }
 
   void _submitForm() {
+    /*
+      with this line of code, the onSaved event of 
+      of every form control will be triggered
+      Also, the state of the widget will be setted 
+      to saved.
+    */
+    _formKey.currentState.save();
+
     final Map<String, dynamic> product = {
       'title': _titlevalue,
       'description': _descriptionValue,
@@ -70,7 +91,17 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10.0),
-      child: ListView(
+      /* NOTE: About Forms 
+       - Forms are actually invisible widgets
+       - Forms allow us to manage operations like 
+         validations, text input controls, and so on.
+       - The key attribute is some kind of global
+         identifier that allow us to access this
+         form object from other parts of our app.
+       */
+      child: Form(
+        key: _formKey,
+        child:ListView(
         children: <Widget>[
           //Title field
           _buildTitleTextField(),
@@ -99,6 +130,6 @@ class _ProductCreateTabState extends State<ProductCreateTab> {
          
         ],
       ),
-    );
+    ));
   }
 }

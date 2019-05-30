@@ -35,7 +35,6 @@ class _MyAppState extends State<MyApp> {
           accentColor: Colors.deepPurple,
           buttonColor: Colors.deepPurple,
           //buttonTheme: ButtonThemeData(textTheme: TextTheme())
-          
           ),
           
       //home: AuthPage(),
