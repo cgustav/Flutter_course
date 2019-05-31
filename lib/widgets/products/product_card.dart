@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 //ui elements
 import '../../ui_elements/title_default.dart';
-import '../../models/product.dart';
 
-class ProductCard extends StatelessWidget{
+//state models
+import '../../models/product.dart';
+import '../../scoped-models/products.dart';
+
+class ProductCard extends StatelessWidget {
   final Product product;
   final int productIndex;
 
@@ -93,7 +97,6 @@ class ProductCard extends StatelessWidget{
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.5),
             margin: EdgeInsets.only(top: 10.0),
             decoration: BoxDecoration(
-
                 border: Border.all(color: Colors.grey, width: 1.0),
                 borderRadius: BorderRadius.circular(6.0)),
             child: Text('Union Square, San Francisco.'),
@@ -104,18 +107,27 @@ class ProductCard extends StatelessWidget{
               IconButton(
                 icon: Icon(Icons.info),
                 color: Theme.of(context).primaryColorDark,
-                onPressed: (){
-                  Navigator.pushNamed<bool>(context, '/product/' + productIndex.toString());
+                onPressed: () {
+                  Navigator.pushNamed<bool>(
+                      context, '/product/' + productIndex.toString());
                 },
                 iconSize: 30.0,
-            ),
-            IconButton(
-                icon: Icon(Icons.favorite_border),
-                color: Colors.red,
-                onPressed: (){
-                  //Navigator.pushNamed<bool>(context, '/product/' + index.toString());
+              ),
+              ScopedModelDescendant<ProductModel>(
+                builder:
+                    (BuildContext context, Widget child, ProductModel model) {
+                  return IconButton(
+                    icon: Icon(model.products[productIndex].isFavorite ? Icons.favorite : Icons.favorite_border),
+                    color: Colors.red,
+                    onPressed: () {
+                      //FAVORITE BUTTON
+                      model.selectProduct(productIndex);
+                      model.toggleProductFavoriteStatus();
+
+                    },
+                  );
                 },
-            ),
+              )
             ],
           ),
         ],

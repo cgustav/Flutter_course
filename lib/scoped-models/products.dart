@@ -6,18 +6,19 @@ class ProductModel extends Model {
   int _selectedProductIndex;
 
   //GETTER
-  List<Product> get products{
+  List<Product> get products {
     //to not return a pointer to the same
     //object in memory (a new List)
+    //this avoid the model.products.add(new Product(...))
     return List.from(_products);
   }
 
-  int get selectedProductIndex{
+  int get selectedProductIndex {
     return _selectedProductIndex;
   }
 
-  Product get selectedProduct{
-    if(_selectedProductIndex ==  null){
+  Product get selectedProduct {
+    if (_selectedProductIndex == null) {
       return null;
     }
     return _products[_selectedProductIndex];
@@ -41,7 +42,21 @@ class ProductModel extends Model {
     _selectedProductIndex = null;
   }
 
-  void selectProduct(int index){
-    _selectedProductIndex =  index;
+  void selectProduct(int index) {
+    _selectedProductIndex = index;
+  }
+
+  void toggleProductFavoriteStatus() {
+    final bool isCurrentlyFavorite = selectedProduct.isFavorite;
+    final bool newFavoriteStatus = !isCurrentlyFavorite;
+
+    final Product updatedProduct = Product(
+        title: selectedProduct.title,
+        description: selectedProduct.description,
+        price: selectedProduct.price,
+        image: selectedProduct.image,
+        isFavorite: newFavoriteStatus);
+
+    updateProduct(updatedProduct);
   }
 }
