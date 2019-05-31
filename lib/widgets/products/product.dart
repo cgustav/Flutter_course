@@ -3,11 +3,12 @@ import 'dart:async';
 
 //ui-elements
 import '../../ui_elements/title_default.dart';
+import '../../models/product.dart';
 
 class ProductPage extends StatelessWidget {
-  final Map<String, dynamic> productItem;
+  final Product item;
 
-  ProductPage(this.productItem);
+  ProductPage(this.item);
 
   Widget _buildProductTitle() {
     return Row(
@@ -18,7 +19,7 @@ class ProductPage extends StatelessWidget {
               //alignment: MainAxisAlignment.center,
               //color: Colors.lightBlue,
               padding: EdgeInsets.all(10.0),
-              child: TitleDefault(productItem['title'])),
+              child: TitleDefault(item.title)),
         )
       ],
     );
@@ -56,7 +57,7 @@ class ProductPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5.0),
                 color: Theme.of(context).backgroundColor),
             child: Text(
-              '\$' + productItem['price'].toString(),
+              '\$' + item.price.toString(),
               style: TextStyle(color: Colors.white, fontSize: 16.0),
             ),
           ),
@@ -102,7 +103,7 @@ class ProductPage extends StatelessWidget {
             /* NOTES: About BorderRadius & decoration properties
                      */
             child: Text(
-              productItem['description'],
+              item.description,
               style: TextStyle(fontSize: 16.0, color: Colors.grey),
             ),
           ),
@@ -121,13 +122,13 @@ class ProductPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(productItem['title']),
+          title: Text(item.title),
         ),
         body: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(productItem['image']),
+            Image.asset(item.image),
             _buildProductTitle(),
             _buildProductPriceDetail(context),
             _buildProductDescriptionDetail(),

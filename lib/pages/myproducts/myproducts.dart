@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../shared/sideBar.dart';
 import '../myproducts/product_edit.dart';
 import '../myproducts/product_list.dart';
+import '../../models/product.dart';
 
 // class ProfilePage extends StatefulWidget{
 
@@ -18,7 +19,7 @@ class MyProductsPage extends StatelessWidget {
   final Function addProduct;
   final Function updateProduct;
   final Function deleteProduct;
-  final List<Map<String,dynamic>> productList;
+  final List<Product> productList;
 
   MyProductsPage(this.addProduct, this.updateProduct, this.deleteProduct, this.productList);
 

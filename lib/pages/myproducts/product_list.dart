@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import './product_edit.dart';
+import '../../models/product.dart';
 
 class ProductListTab extends StatelessWidget {
-  final List<Map<String, dynamic>> productList;
+  final List<Product> productList;
   final Function updateProduct;
   final Function deleteProduct;
 
@@ -15,7 +16,7 @@ class ProductListTab extends StatelessWidget {
       itemCount: productList.length,
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
-          key: Key(productList[index]['title']),
+          key: Key(productList[index].title),
           background: Container(
             color: Colors.red,
           ),
@@ -28,6 +29,10 @@ class ProductListTab extends StatelessWidget {
             } else {
               //print('Other swiping');
             }
+              //print('-------------');
+              //print('-------------');
+              //print('-------------');
+              //
           },
           child: Column(
             children: <Widget>[
@@ -37,17 +42,17 @@ class ProductListTab extends StatelessWidget {
                     height: 40.0,
                     child: CircleAvatar(
                       backgroundImage: AssetImage(
-                        productList[index]['image'],
+                        productList[index].image,
                       ),
                     )),
                 title: Text(
-                  productList[index]['title'],
+                  productList[index].title,
                   style: TextStyle(
                       fontFamily: 'Exo2',
                       fontWeight: FontWeight.bold,
                       color: Colors.grey),
                 ),
-                subtitle: Text('\$ ' + productList[index]['price'].toString()),
+                subtitle: Text('\$ ' + productList[index].price.toString()),
                 trailing: _showEditIconButton(context, index),
               ),
               Divider()

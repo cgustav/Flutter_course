@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../models/product.dart';
 
 class ProductCreateTab extends StatefulWidget {
   final Function addProduct;

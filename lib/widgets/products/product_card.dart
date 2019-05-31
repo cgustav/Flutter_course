@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 //ui elements
 import '../../ui_elements/title_default.dart';
+import '../../models/product.dart';
 
 class ProductCard extends StatelessWidget{
-  final Map<String,dynamic> product;
+  final Product product;
   final int productIndex;
 
   ProductCard(this.product, this.productIndex);
@@ -14,7 +15,7 @@ class ProductCard extends StatelessWidget{
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(product['image']),
+          Image.asset(product.image),
           //SizedBox(height: 50.0,child: Container(color: Colors.green,)),
           Container(
               //NOTES: About margin
@@ -60,7 +61,7 @@ class ProductCard extends StatelessWidget{
                   // -> It gives the widget which it wraps as much
                   //    space in the row or column you're using it
                   //    as possible.
-                  TitleDefault(product['title']),
+                  TitleDefault(product.title),
                   SizedBox(
                     width: 8.0,
                   ),
@@ -82,7 +83,7 @@ class ProductCard extends StatelessWidget{
                         borderRadius: BorderRadius.circular(5.0),
                         color: Theme.of(context).backgroundColor),
                     child: Text(
-                      '\$' + product['price'].toString(),
+                      '\$' + product.price.toString(),
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

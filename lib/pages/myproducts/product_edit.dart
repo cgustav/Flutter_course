@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 ////
 import '../../widgets/helpers/ensure-visible.dart';
+import '../../models/product.dart';
 
 //
 class ProductEditTab extends StatefulWidget {
   final Function addProduct;
   final Function updateProduct;
-  final Map<String, dynamic> product;
+  final Product product;
 
   final int productIndex;
 
@@ -59,7 +60,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
 
   //HELPERS
 
-  Widget _buildPageContent(){
+  Widget _buildPageContent() {
     return GestureDetector(
       onTap: () {
         //we stablish a autofocus action
@@ -97,7 +98,6 @@ class _ProductEditTabState extends State<ProductEditTab> {
     );
   }
 
-
   Widget _buildTitleTextField() {
     /* NOTE: About TextFormFields
       - These are special text fields that can be
@@ -127,7 +127,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
       child: TextFormField(
         focusNode: _titleFocusNode,
         decoration: InputDecoration(labelText: 'Product title'),
-        initialValue: widget.product == null ? '' : widget.product['title'],
+        initialValue: widget.product == null ? '' : widget.product.title,
         validator: (String value) {
           //if(value.trim().length <= 0){
           if (value.isEmpty || value.trim().length < 3) {
@@ -149,7 +149,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
           maxLines: 4,
           decoration: InputDecoration(labelText: 'Product description'),
           initialValue:
-              widget.product == null ? '' : widget.product['description'],
+              widget.product == null ? '' : widget.product.description,
           validator: (String value) {
             if (value.isEmpty || value.trim().length < 5) {
               return 'Description is required and should be 5+ characters long.';
@@ -169,7 +169,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
           decoration: InputDecoration(labelText: 'Product price'),
           keyboardType: TextInputType.number,
           initialValue:
-              widget.product == null ? '' : widget.product['price'].toString(),
+              widget.product == null ? '' : widget.product.price.toString(),
           validator: (String value) {
             if (value.isEmpty ||
                 !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
@@ -212,9 +212,19 @@ class _ProductEditTabState extends State<ProductEditTab> {
     _formKey.currentState.save();
 
     if (widget.product == null) {
-      widget.addProduct(_formData);
+      widget.addProduct(Product(
+          title: _formData['title'],
+          description: _formData['description'],
+          price: _formData['price'],
+          image: _formData['image']));
     } else {
-      widget.updateProduct(widget.productIndex, _formData);
+      widget.updateProduct(
+          widget.productIndex,
+          Product(
+              title: _formData['title'],
+              description: _formData['description'],
+              price: _formData['price'],
+              image: _formData['image']));
     }
 
     Navigator.pushReplacementNamed(context, '/products');
