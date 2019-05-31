@@ -23,7 +23,7 @@ class ProductPage extends StatelessWidget {
       return Future.value(false); //to not use the default pop
     }, child: ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        final Product item =  model.products[productIndex];
+        final Product item =  model.allProducts[productIndex];
 
         return Scaffold(
           appBar: AppBar(

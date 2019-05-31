@@ -87,7 +87,10 @@ class ProductListTab extends StatelessWidget {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return ProductEditTab();
-        }));
+        }))
+        .then((_)=>{
+          model.selectProduct(null)
+        });
       },
     );
     //   },

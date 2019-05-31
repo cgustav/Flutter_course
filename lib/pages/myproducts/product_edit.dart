@@ -186,12 +186,12 @@ class _ProductEditTabState extends State<ProductEditTab> {
         color: Theme.of(context).accentColor,
         textColor: Colors.white, //primary
         onPressed: () => _submitForm(
-            model.addProduct, model.updateProduct, model.selectedProductIndex),
+            model.addProduct, model.updateProduct, model.selectProduct, model.selectedProductIndex),
       );
     });
   }
 
-  void _submitForm(Function addProduct, Function updateProduct,
+  void _submitForm(Function addProduct, Function updateProduct, Function setSelectedProduct,
       [int selectedProductIndex]) {
 
     /* Note: About Key States
@@ -231,7 +231,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
       );
     }
 
-    Navigator.pushReplacementNamed(context, '/products');
+    Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
   }
 
   //END HELPERS
