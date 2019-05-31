@@ -4,8 +4,9 @@ import '../models/product.dart';
 class ProductModel extends Model {
   List<Product> _products = [];
   int _selectedProductIndex;
+  bool _showFavorites = false;
 
-  //GETTER
+  //GETTERS
   List<Product> get products {
     //to not return a pointer to the same
     //object in memory (a new List)
@@ -13,8 +14,14 @@ class ProductModel extends Model {
     return List.from(_products);
   }
 
-  int get selectedProductIndex {
-    return _selectedProductIndex;
+  List<Product> get displayedProducts {
+    //A list with all favorites products
+    //the where method returns a new List by default
+    //so we dont have to instance a new List Object
+    if (_showFavorites) {
+      return _products.where((Product item)=>item.isFavorite).toList();
+    }
+    return List.from(_products);
   }
 
   Product get selectedProduct {
@@ -23,7 +30,16 @@ class ProductModel extends Model {
     }
     return _products[_selectedProductIndex];
   }
-  //SETTER
+
+  int get selectedProductIndex {
+    return _selectedProductIndex;
+  }
+
+  bool get displayFavoritesOnly{
+    return _showFavorites;
+  }
+
+  //SETTERS
   //--
 
   //METHODS
@@ -50,6 +66,11 @@ class ProductModel extends Model {
     notifyListeners();
   }
 
+  void toggleDisplayMode(){
+    _showFavorites = !_showFavorites;
+    notifyListeners();
+  }
+
   void toggleProductFavoriteStatus() {
     final bool isCurrentlyFavorite = selectedProduct.isFavorite;
     final bool newFavoriteStatus = !isCurrentlyFavorite;
@@ -62,6 +83,7 @@ class ProductModel extends Model {
         isFavorite: newFavoriteStatus);
 
     updateProduct(updatedProduct);
+
     /* Note: About Notify Listeners
        ----------------------------
        We call this function which is provided by 
@@ -71,5 +93,6 @@ class ProductModel extends Model {
        it's wrapped content.
     */
     notifyListeners();
+    _selectedProductIndex = null;
   }
 }
