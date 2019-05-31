@@ -46,7 +46,21 @@ class _ProductEditTabState extends State<ProductEditTab> {
     //     padding: EdgeInsets.all(15.0),
     //     child: Text('My Button'),),
     // )
-    final Widget pageContent = GestureDetector(
+
+    return widget.product == null
+        ? _buildPageContent()
+        : Scaffold(
+            appBar: AppBar(
+              title: Text('Edit product'),
+            ),
+            body: _buildPageContent(),
+          );
+  }
+
+  //HELPERS
+
+  Widget _buildPageContent(){
+    return GestureDetector(
       onTap: () {
         //we stablish a autofocus action
         FocusScope.of(context).requestFocus(FocusNode());
@@ -81,18 +95,9 @@ class _ProductEditTabState extends State<ProductEditTab> {
             ),
           )),
     );
-
-    return widget.product == null
-        ? pageContent
-        : Scaffold(
-            appBar: AppBar(
-              title: Text('Edit product'),
-            ),
-            body: pageContent,
-          );
   }
 
-  //HELPERS
+
   Widget _buildTitleTextField() {
     /* NOTE: About TextFormFields
       - These are special text fields that can be
@@ -116,7 +121,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
         will be the error message (if there is exists one).
         It can me a string value or null.
     */
-    
+
     return EnsureVisibleWhenFocused(
       focusNode: _titleFocusNode,
       child: TextFormField(

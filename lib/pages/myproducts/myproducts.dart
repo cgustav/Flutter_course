@@ -44,7 +44,7 @@ class MyProductsPage extends StatelessWidget {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[ProductEditTab(addProduct: addProduct,), ProductListTab(productList, updateProduct)],
+            children: <Widget>[ProductEditTab(addProduct: addProduct,), ProductListTab(productList, updateProduct, deleteProduct)],
           ),
         ));
   }
