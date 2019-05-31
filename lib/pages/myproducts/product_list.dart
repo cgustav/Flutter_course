@@ -13,13 +13,17 @@ class ProductListTab extends StatelessWidget {
     return ListView.builder(
       itemCount: productList.length,
       itemBuilder: (BuildContext context, int index) {
-        return ListTile(
+        return Dismissible(
+          key: Key(productList[index]['title']),
+          background: Container(color: Colors.red,),
+          child:Column(
+            children: <Widget>[ListTile(
           leading: Container(
-              width: 60.0,
-              height: 60.0,
-              child: Image.asset(
+              width: 40.0,
+              height: 40.0,
+              child: CircleAvatar(backgroundImage: AssetImage(
                 productList[index]['image'],
-              )),
+              ),)),
           title: Text(
             productList[index]['title'],
             style: TextStyle(
@@ -27,15 +31,24 @@ class ProductListTab extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.grey),
           ),
+          subtitle: Text('\$ '+productList[index]['price'].toString()),
           trailing: IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context){
-                return ProductEditTab(product: productList[index], updateProduct: updateProduct,productIndex: index,);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return ProductEditTab(
+                  product: productList[index],
+                  updateProduct: updateProduct,
+                  productIndex: index,
+                );
               }));
             },
           ),
+        ),
+        Divider()
+        ],),
+        //next
         );
       },
     );
