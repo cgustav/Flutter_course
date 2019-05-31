@@ -30,20 +30,24 @@ class ProductModel extends Model {
   void addProduct(Product product) {
     _products.add(product);
     _selectedProductIndex = null;
+    notifyListeners();
   }
 
   void deleteProduct() {
     _products.removeAt(_selectedProductIndex);
     _selectedProductIndex = null;
+    notifyListeners();
   }
 
   void updateProduct(Product product) {
     _products[_selectedProductIndex] = product;
     _selectedProductIndex = null;
+    notifyListeners();
   }
 
   void selectProduct(int index) {
     _selectedProductIndex = index;
+    notifyListeners();
   }
 
   void toggleProductFavoriteStatus() {
@@ -58,5 +62,14 @@ class ProductModel extends Model {
         isFavorite: newFavoriteStatus);
 
     updateProduct(updatedProduct);
+    /* Note: About Notify Listeners
+       ----------------------------
+       We call this function which is provided by 
+       the scope model package, which will essentialy
+       update all scope's model listeners, so they will
+       re-render the ScopeModelDescendant Widget and all
+       it's wrapped content.
+    */
+    notifyListeners();
   }
 }
