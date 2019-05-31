@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 //import 'package:flutter/rendering.dart';
 
 //local
@@ -8,6 +9,7 @@ import './pages/home/products.dart';
 import './pages/myproducts/myproducts.dart';
 import './widgets/products/product.dart';
 import './models/product.dart';
+import './scoped-models/products.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -29,7 +31,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ScopedModel<ProductModel>(
+      model: ProductModel(),
+      child:MaterialApp(
       //debugShowMaterialGrid: true,
       theme: ThemeData(
           brightness: Brightness.light,
@@ -78,7 +82,7 @@ class _MyAppState extends State<MyApp> {
           // };
 
           return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(_products[index]));
+              builder: (BuildContext context) => ProductPage(index));
         }
 
         //
@@ -94,7 +98,8 @@ class _MyAppState extends State<MyApp> {
                 //ProductsPage(_products, _addProduct, _deleteProduct));
                 ProductsPage(_products));
       },
-    );
+    ),);
+    
 
     
   }

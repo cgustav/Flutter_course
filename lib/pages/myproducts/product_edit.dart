@@ -7,14 +7,12 @@ import '../../models/product.dart';
 
 //
 class ProductEditTab extends StatefulWidget {
-  final Function addProduct;
-  final Function updateProduct;
+  // final Function addProduct;
+  // final Function updateProduct;
   final Product product;
-
   final int productIndex;
 
-  ProductEditTab(
-      {this.addProduct, this.updateProduct, this.product, this.productIndex});
+  ProductEditTab({this.product, this.productIndex});
 
   @override
   State<StatefulWidget> createState() {
@@ -211,13 +209,13 @@ class _ProductEditTabState extends State<ProductEditTab> {
     _formKey.currentState.save();
 
     if (widget.product == null) {
-      widget.addProduct(Product(
+      addProduct(Product(
           title: _formData['title'],
           description: _formData['description'],
           price: _formData['price'],
           image: _formData['image']));
     } else {
-      widget.updateProduct(
+      updateProduct(
           widget.productIndex,
           Product(
               title: _formData['title'],

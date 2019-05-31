@@ -4,13 +4,44 @@ import 'dart:async';
 //ui-elements
 import '../../ui_elements/title_default.dart';
 import '../../models/product.dart';
+import '../../scoped-models/products.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ProductPage extends StatelessWidget {
-  final Product item;
+  final int productIndex;
 
-  ProductPage(this.item);
+  ProductPage(this.productIndex);
 
-  Widget _buildProductTitle() {
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(onWillPop: () {
+      print('Back Button Pressed');
+      Navigator.pop(context, false); //we dont want to delete //customized pop
+      return Future.value(false); //to not use the default pop
+    }, child: ScopedModelDescendant<ProductModel>(
+      builder: (BuildContext context, Widget child, ProductModel model) {
+        final Product item =  model.products[productIndex];
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(item.title),
+          ),
+          body: Column(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(item.image),
+              _buildProductTitle(item),
+              _buildProductPriceDetail(context, item),
+              _buildProductDescriptionDetail(item),
+            ],
+          ),
+        );
+      },
+    ));
+  }
+
+  Widget _buildProductTitle(Product item) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -25,7 +56,7 @@ class ProductPage extends StatelessWidget {
     );
   }
 
-  Widget _buildProductPriceDetail(BuildContext context) {
+  Widget _buildProductPriceDetail(BuildContext context, Product item) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -66,7 +97,7 @@ class ProductPage extends StatelessWidget {
     );
   }
 
-  Widget _buildProductDescriptionDetail() {
+  Widget _buildProductDescriptionDetail(Product item) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -111,58 +142,4 @@ class ProductPage extends StatelessWidget {
       ],
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        print('Back Button Pressed');
-        Navigator.pop(context, false); //we dont want to delete //customized pop
-        return Future.value(false); //to not use the default pop
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(item.title),
-        ),
-        body: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(item.image),
-            _buildProductTitle(),
-            _buildProductPriceDetail(context),
-            _buildProductDescriptionDetail(),
-
-          ],
-        ),
-      ),
-    );
-  }
-
-  // _showWarningDialog(BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: Text('Are you sure?'),
-  //           content: Text('This action cannot be undone!'),
-  //           actions: <Widget>[
-  //             FlatButton(
-  //               child: Text('Confirm'),
-  //               onPressed: () {
-  //                 Navigator.pop(context); //close the dialog
-  //                 Navigator.pop(context,
-  //                     true); //Navigates away with true value to delete product
-  //               },
-  //             ),
-  //             FlatButton(
-  //               child: Text('Discard'),
-  //               onPressed: () {
-  //                 Navigator.pop(context); //deletes content
-  //               },
-  //             ),
-  //           ],
-  //         );
-  //       });
-  // }
 }
