@@ -1,6 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
 
 //locales
+import './connected_product.dart';
 import './products.dart';
 import './user.dart';
 
@@ -14,6 +15,6 @@ import './user.dart';
 
 */
 
-class MainModel extends Model with UserModel, ProductModel{
+class MainModel extends Model with ConnectedProducts,UserModel, ProductModel{
 
 } 

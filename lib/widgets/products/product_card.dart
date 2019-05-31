@@ -103,7 +103,9 @@ class ProductCard extends StatelessWidget {
                 border: Border.all(color: Colors.grey, width: 1.0),
                 borderRadius: BorderRadius.circular(6.0)),
             child: Text('Union Square, San Francisco.'),
+            //Text(''),
           ),
+          Text(product.userEmail),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[

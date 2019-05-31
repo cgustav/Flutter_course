@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+//import 'package:scoped_model/scoped_model.dart';
 
 //local imports
-import '../home/products.dart';
 import '../../widgets/auth/standardAuthForm.dart';
+
+
 
 class AuthPage extends StatefulWidget {
   @override

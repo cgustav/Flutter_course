@@ -3,17 +3,20 @@ import 'package:scoped_model/scoped_model.dart';
 //models
 import '../models/product.dart';
 
-mixin ProductModel on Model {
-  List<Product> _products = [];
-  int _selectedProductIndex;
+//scoped parent
+import './connected_product.dart';
+
+
+//class ProductModel extends ConnectedProducts 
+mixin ProductModel on ConnectedProducts {
   bool _showFavorites = false;
 
   //GETTERS
-  List<Product> get products {
+  List<Product> get allProducts {
     //to not return a pointer to the same
     //object in memory (a new List)
     //this avoid the model.products.add(new Product(...))
-    return List.from(_products);
+    return List.from(products);
   }
 
   List<Product> get displayedProducts {
@@ -21,23 +24,23 @@ mixin ProductModel on Model {
     //the where method returns a new List by default
     //so we dont have to instance a new List Object
     if (_showFavorites) {
-      return _products.where((Product item)=>item.isFavorite).toList();
+      return products.where((Product item) => item.isFavorite).toList();
     }
-    return List.from(_products);
+    return List.from(products);
   }
 
   Product get selectedProduct {
-    if (_selectedProductIndex == null) {
+    if (selProductIndex == null) {
       return null;
     }
-    return _products[_selectedProductIndex];
+    return products[selProductIndex];
   }
 
   int get selectedProductIndex {
-    return _selectedProductIndex;
+    return selProductIndex;
   }
 
-  bool get displayFavoritesOnly{
+  bool get displayFavoritesOnly {
     return _showFavorites;
   }
 
@@ -45,30 +48,38 @@ mixin ProductModel on Model {
   //--
 
   //METHODS
-  void addProduct(Product product) {
-    _products.add(product);
-    _selectedProductIndex = null;
-    notifyListeners();
-  }
+  // void addProduct(Product product) {
+  //   _products.add(product);
+  //   _selectedProductIndex = null;
+  //   notifyListeners();
+  // }
 
   void deleteProduct() {
-    _products.removeAt(_selectedProductIndex);
-    _selectedProductIndex = null;
+    products.removeAt(selProductIndex);
+    selProductIndex = null;
     notifyListeners();
   }
 
-  void updateProduct(Product product) {
-    _products[_selectedProductIndex] = product;
-    _selectedProductIndex = null;
+  void updateProduct(String title, String description, String image, double price) {
+    final Product updatedProduct = Product(
+        title: title,
+        description: description,
+        image: image,
+        price: price,
+        userEmail: selectedProduct.userEmail,
+        userId: selectedProduct.userId);
+
+    products[selProductIndex] = updatedProduct;
+    selProductIndex = null;
     notifyListeners();
   }
 
   void selectProduct(int index) {
-    _selectedProductIndex = index;
+    selProductIndex = index;
     notifyListeners();
   }
 
-  void toggleDisplayMode(){
+  void toggleDisplayMode() {
     _showFavorites = !_showFavorites;
     notifyListeners();
   }
@@ -82,9 +93,11 @@ mixin ProductModel on Model {
         description: selectedProduct.description,
         price: selectedProduct.price,
         image: selectedProduct.image,
+        userEmail: selectedProduct.userEmail,
+        userId: selectedProduct.userId,
         isFavorite: newFavoriteStatus);
 
-    updateProduct(updatedProduct);
+    products[selProductIndex] = updatedProduct;
 
     /* Note: About Notify Listeners
        ----------------------------
@@ -94,7 +107,8 @@ mixin ProductModel on Model {
        re-render the ScopeModelDescendant Widget and all
        it's wrapped content.
     */
+
     notifyListeners();
-    _selectedProductIndex = null;
+    selProductIndex = null;
   }
 }

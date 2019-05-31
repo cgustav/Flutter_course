@@ -17,7 +17,7 @@ class ProductListTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        final List<Product> productList = model.products;
+        final List<Product> productList = model.allProducts;
 
         return ListView.builder(
           itemCount: productList.length,

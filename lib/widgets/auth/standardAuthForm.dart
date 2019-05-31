@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+//scoped models
+import '../../scoped-models/main.dart';
 
 class StandardAuthForm extends StatefulWidget {
   final BuildContext context;
@@ -7,7 +10,6 @@ class StandardAuthForm extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _StandardAuthFormState();
   }
 }
@@ -54,7 +56,19 @@ class _StandardAuthFormState extends State<StandardAuthForm>{
                   height: 20.0,
                 ),
                 _buildSwitchTile(),
-                _buildSubmittionButton()
+                //_buildSubmittionButton()
+                //-------SHOW BUTTON
+                ScopedModelDescendant<MainModel>(builder:(BuildContext context, Widget child, MainModel model){
+                    return RaisedButton(
+                      //color: Theme.of(context).accentColor,
+                      textColor: Colors.white,
+                      child: Center(
+                        child: Text('LogIn'),
+                      ),
+                      onPressed: () => _submitForm(model.login)
+                      );
+                  }),
+                  //-----END BUTTON
               ]),
             ),
           ))),
@@ -116,15 +130,10 @@ class _StandardAuthFormState extends State<StandardAuthForm>{
 
   }
 
-  Widget _buildSubmittionButton() {
-    return RaisedButton(
-        //color: Theme.of(context).accentColor,
-        textColor: Colors.white,
-        child: Center(
-          child: Text('LogIn'),
-        ),
-        onPressed: () => _submitForm());
-  }
+  //  _buildSubmittionButton() {
+     
+
+  // }
 
   void switchTerms(bool value) {
     setState(() {
@@ -132,14 +141,17 @@ class _StandardAuthFormState extends State<StandardAuthForm>{
     });
   }
 
-  void _submitForm() {
+  void _submitForm(Function login) {
+
     if (!_authFormKey.currentState.validate() || !_credentials['accept']) {
       return;
     } 
 
     print('Authenticating...');
     _authFormKey.currentState.save();
-    print(_credentials.toString());
+
+    login(_credentials['email'], _credentials['password']);
+
     Navigator.pushReplacementNamed(context, '/products');
   }
 
