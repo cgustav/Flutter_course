@@ -9,7 +9,9 @@ import './pages/home/products.dart';
 import './pages/myproducts/myproducts.dart';
 import './widgets/products/product.dart';
 import './models/product.dart';
-import './scoped-models/products.dart';
+//scoped
+//import './scoped-models/products.dart';
+import './scoped-models/main.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -28,11 +30,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   //List<Map<String, dynamic>> _products = [];
   List<Product> _products = [];
+  
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<ProductModel>(
-      model: ProductModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child:MaterialApp(
       //debugShowMaterialGrid: true,
       theme: ThemeData(

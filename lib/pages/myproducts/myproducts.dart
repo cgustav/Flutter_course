@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 //import locales
-
 import '../shared/sideBar.dart';
 import '../myproducts/product_edit.dart';
 import '../myproducts/product_list.dart';
+
+//models
 import '../../models/product.dart';
 
 

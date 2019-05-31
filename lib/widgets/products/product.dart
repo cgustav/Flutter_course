@@ -1,11 +1,14 @@
+import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 //ui-elements
 import '../../ui_elements/title_default.dart';
 import '../../models/product.dart';
-import '../../scoped-models/products.dart';
-import 'package:scoped_model/scoped_model.dart';
+
+//scoped
+//import '../../scoped-models/products.dart';
+import '../../scoped-models/main.dart';
 
 class ProductPage extends StatelessWidget {
   final int productIndex;
@@ -18,8 +21,8 @@ class ProductPage extends StatelessWidget {
       print('Back Button Pressed');
       Navigator.pop(context, false); //we dont want to delete //customized pop
       return Future.value(false); //to not use the default pop
-    }, child: ScopedModelDescendant<ProductModel>(
-      builder: (BuildContext context, Widget child, ProductModel model) {
+    }, child: ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
         final Product item =  model.products[productIndex];
 
         return Scaffold(

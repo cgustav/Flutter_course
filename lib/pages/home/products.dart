@@ -6,7 +6,9 @@ import 'package:scoped_model/scoped_model.dart';
 import '../shared/sideBar.dart';
 import '../../widgets/products/products.dart';
 import '../../models/product.dart';
-import '../../scoped-models/products.dart';
+
+//scoped models
+import '../../scoped-models/main.dart';
 
 class ProductsPage extends StatelessWidget {
   final List<Product> products;
@@ -20,7 +22,7 @@ class ProductsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
         actions: <Widget>[
-         ScopedModelDescendant<ProductModel>(builder: (BuildContext context, Widget child, ProductModel model){
+         ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
            return  IconButton(
             icon: Icon(model.displayFavoritesOnly ? Icons.favorite : Icons.favorite_border),
             onPressed: () {

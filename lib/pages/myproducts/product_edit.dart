@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-////
+
+//locales
+//helpers
 import '../../widgets/helpers/ensure-visible.dart';
-import '../../scoped-models/products.dart';
+//models 
 import '../../models/product.dart';
+//scoped models
+//import '../../scoped-models/products.dart';
+import '../../scoped-models/main.dart';
 
 //
 class ProductEditTab extends StatefulWidget {
@@ -34,7 +39,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<ProductModel>(builder: (BuildContext context, Widget child, ProductModel model){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       final Widget pageContent =  _buildPageContent(context, model.selectedProduct);
       return model.selectedProductIndex == null
         ? pageContent
@@ -175,7 +180,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
   }
 
   Widget _buildSubmitButton(BuildContext context) {
-    return ScopedModelDescendant<ProductModel>(builder: (BuildContext context, Widget child, ProductModel model){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       return RaisedButton(
         child: Text('Save'),
         color: Theme.of(context).accentColor,

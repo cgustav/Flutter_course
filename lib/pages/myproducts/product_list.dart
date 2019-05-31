@@ -3,21 +3,20 @@ import 'package:scoped_model/scoped_model.dart';
 
 //locales
 import './product_edit.dart';
+//models
 import '../../models/product.dart';
-import '../../scoped-models/products.dart';
+//scope models
+//import '../../scoped-models/products.dart';
+import '../../scoped-models/main.dart';
 
 class ProductListTab extends StatelessWidget {
-  //final List<Product> productList;
-  //final Function updateProduct;
-  //final Function deleteProduct;
 
-  //ProductListTab(this.productList, this.updateProduct, this.deleteProduct);
   ProductListTab();
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<ProductModel>(
-      builder: (BuildContext context, Widget child, ProductModel model) {
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
         final List<Product> productList = model.products;
 
         return ListView.builder(
@@ -78,7 +77,7 @@ class ProductListTab extends StatelessWidget {
   //HELPERS
 
   Widget _showEditIconButton(
-      BuildContext context, int index, ProductModel model) {
+      BuildContext context, int index, MainModel model) {
     // return ScopedModelDescendant<ProductModel>(
     //   builder: (BuildContext context, Widget child, ProductModel model) {
     return IconButton(
