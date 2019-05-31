@@ -7,13 +7,7 @@ import '../../models/product.dart';
 
 //
 class ProductEditTab extends StatefulWidget {
-  // final Function addProduct;
-  // final Function updateProduct;
-  final Product product;
-  final int productIndex;
-
-  ProductEditTab({this.product, this.productIndex});
-
+  //Without constructor
   @override
   State<StatefulWidget> createState() {
     return _ProductEditTabState();
@@ -40,19 +34,23 @@ class _ProductEditTabState extends State<ProductEditTab> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.product == null
-        ? _buildPageContent()
+    return ScopedModelDescendant<ProductModel>(builder: (BuildContext context, Widget child, ProductModel model){
+      final Widget pageContent =  _buildPageContent(context, model.selectedProduct);
+      return model.selectedProductIndex == null
+        ? pageContent
         : Scaffold(
             appBar: AppBar(
               title: Text('Edit product'),
             ),
-            body: _buildPageContent(),
+            body: pageContent,
           );
+  });
+    
   }
 
   //HELPERS
 
-  Widget _buildPageContent() {
+  Widget _buildPageContent(BuildContext context, Product product) {
       //Notes: About Gesture Detectors & Customized Buttons
       //   -> It contains tons of events, it's awesome!
     return GestureDetector(
@@ -75,11 +73,11 @@ class _ProductEditTabState extends State<ProductEditTab> {
             child: ListView(
               children: <Widget>[
                 //Title field
-                _buildTitleTextField(),
+                _buildTitleTextField(product),
                 //Description field
-                _buildDescriptionTextField(),
+                _buildDescriptionTextField(product),
                 //Price field
-                _buildPriceTextField(),
+                _buildPriceTextField(product),
                 //Separator
                 SizedBox(
                   height: 10.0,
@@ -92,7 +90,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
     );
   }
 
-  Widget _buildTitleTextField() {
+  Widget _buildTitleTextField(Product product) {
     /* NOTE: About TextFormFields
       - These are special text fields that can be
         integrated into such a form
@@ -121,7 +119,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
       child: TextFormField(
         focusNode: _titleFocusNode,
         decoration: InputDecoration(labelText: 'Product title'),
-        initialValue: widget.product == null ? '' : widget.product.title,
+        initialValue: product == null ? '' : product.title,
         validator: (String value) {
           //if(value.trim().length <= 0){
           if (value.isEmpty || value.trim().length < 3) {
@@ -135,7 +133,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
     );
   }
 
-  Widget _buildDescriptionTextField() {
+  Widget _buildDescriptionTextField(Product product) {
     return EnsureVisibleWhenFocused(
         focusNode: _descriptionFocusNode,
         child: TextFormField(
@@ -143,7 +141,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
           maxLines: 4,
           decoration: InputDecoration(labelText: 'Product description'),
           initialValue:
-              widget.product == null ? '' : widget.product.description,
+              product == null ? '' : product.description,
           validator: (String value) {
             if (value.isEmpty || value.trim().length < 5) {
               return 'Description is required and should be 5+ characters long.';
@@ -155,7 +153,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
         ));
   }
 
-  Widget _buildPriceTextField() {
+  Widget _buildPriceTextField(Product product) {
     return EnsureVisibleWhenFocused(
         focusNode: _priceFocusNode,
         child: TextFormField(
@@ -163,7 +161,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
           decoration: InputDecoration(labelText: 'Product price'),
           keyboardType: TextInputType.number,
           initialValue:
-              widget.product == null ? '' : widget.product.price.toString(),
+              product == null ? '' : product.price.toString(),
           validator: (String value) {
             if (value.isEmpty ||
                 !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
@@ -182,12 +180,12 @@ class _ProductEditTabState extends State<ProductEditTab> {
         child: Text('Save'),
         color: Theme.of(context).accentColor,
         textColor: Colors.white, //primary
-        onPressed:()=> _submitForm(model.addProduct, model.updateProduct),
+        onPressed:()=> _submitForm(model.addProduct, model.updateProduct, model.selectedProductIndex),
         );
   });
   }
 
-  void _submitForm(Function addProduct, Function updateProduct) {
+  void _submitForm(Function addProduct, Function updateProduct, [int selectedProductIndex]) {
     /* Note: About Key States
       -With the Save() method, the onSaved 
        event of every form control will be triggered
@@ -208,7 +206,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
 
     _formKey.currentState.save();
 
-    if (widget.product == null) {
+    if (selectedProductIndex == null) {
       addProduct(Product(
           title: _formData['title'],
           description: _formData['description'],
@@ -216,7 +214,6 @@ class _ProductEditTabState extends State<ProductEditTab> {
           image: _formData['image']));
     } else {
       updateProduct(
-          widget.productIndex,
           Product(
               title: _formData['title'],
               description: _formData['description'],

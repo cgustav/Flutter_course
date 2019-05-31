@@ -7,18 +7,9 @@ import '../myproducts/product_edit.dart';
 import '../myproducts/product_list.dart';
 import '../../models/product.dart';
 
-// class ProfilePage extends StatefulWidget{
-
-// }
-
-// class _ProfileState extends State<ProfilePage> {
-
-// }
 
 class MyProductsPage extends StatelessWidget {
-  // final Function addProduct;
-  // final Function updateProduct;
-  // final Function deleteProduct;
+
   final List<Product> productList;
 
   MyProductsPage(this.productList);

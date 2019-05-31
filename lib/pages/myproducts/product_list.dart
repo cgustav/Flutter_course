@@ -19,6 +19,7 @@ class ProductListTab extends StatelessWidget {
     return ScopedModelDescendant<ProductModel>(
       builder: (BuildContext context, Widget child, ProductModel model) {
         final List<Product> productList = model.products;
+
         return ListView.builder(
           itemCount: productList.length,
           itemBuilder: (BuildContext context, int index) {
@@ -28,9 +29,10 @@ class ProductListTab extends StatelessWidget {
                 color: Colors.red,
               ),
               onDismissed: (DismissDirection direction) {
+                model.selectProduct(index);
                 if (direction == DismissDirection.endToStart) {
                   //print('swiped end to start');
-                  model.deleteProduct(index);
+                  model.deleteProduct();
                 } else if (direction == DismissDirection.startToEnd) {
                   //print('swiped start to end');
                 } else {
@@ -60,7 +62,7 @@ class ProductListTab extends StatelessWidget {
                           color: Colors.grey),
                     ),
                     subtitle: Text('\$ ' + productList[index].price.toString()),
-                    trailing: _showEditIconButton(context, index, productList),
+                    trailing: _showEditIconButton(context, index, model),
                   ),
                   Divider()
                 ],
@@ -75,18 +77,21 @@ class ProductListTab extends StatelessWidget {
 
   //HELPERS
 
-  Widget _showEditIconButton(BuildContext context, int index, List<Product> productList) {
+  Widget _showEditIconButton(
+      BuildContext context, int index, ProductModel model) {
+    // return ScopedModelDescendant<ProductModel>(
+    //   builder: (BuildContext context, Widget child, ProductModel model) {
     return IconButton(
       icon: Icon(Icons.edit),
       onPressed: () {
+        model.selectProduct(index);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
-          return ProductEditTab(
-            product: productList[index],
-            productIndex: index,
-          );
+          return ProductEditTab();
         }));
       },
     );
+    //   },
+    // );
   }
 }
