@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './product.dart';
+//import './product.dart';
 import './product_card.dart';
 class Products extends StatelessWidget {
   final List<Map<String, dynamic>> products;
@@ -12,7 +12,6 @@ class Products extends StatelessWidget {
     return _buildProductList();
   }
 
-  //
   //INNER COMPONENTS
   Widget _buildProductList() {
     Widget productCard = Center(

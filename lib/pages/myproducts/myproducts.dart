@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //import locales
 
 import '../shared/sideBar.dart';
-import '../myproducts/product_create.dart';
+import '../myproducts/product_edit.dart';
 import '../myproducts/product_list.dart';
 
 // class ProfilePage extends StatefulWidget{
@@ -16,9 +16,11 @@ import '../myproducts/product_list.dart';
 
 class MyProductsPage extends StatelessWidget {
   final Function addProduct;
+  final Function updateProduct;
   final Function deleteProduct;
+  final List<Map<String,dynamic>> productList;
 
-  MyProductsPage(this.addProduct, this.deleteProduct);
+  MyProductsPage(this.addProduct, this.updateProduct, this.deleteProduct, this.productList);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class MyProductsPage extends StatelessWidget {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[ProductCreateTab(addProduct), ProductListTab()],
+            children: <Widget>[ProductEditTab(addProduct: addProduct,), ProductListTab(productList, updateProduct)],
           ),
         ));
   }

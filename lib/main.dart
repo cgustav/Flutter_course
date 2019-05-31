@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
           return ProductsPage(_products);
         },
         '/myproducts': (BuildContext context) {
-          return MyProductsPage(_addProduct, _deleteProduct);
+          return MyProductsPage(_addProduct, _updateProduct, _deleteProduct, _products);
         }
       },
       //exception
@@ -108,6 +108,12 @@ class _MyAppState extends State<MyApp> {
   void _deleteProduct(int index) {
     setState(() {
       _products.removeAt(index);
+    });
+  }
+
+  void _updateProduct(int index, Map<String,dynamic>product){
+    setState(() {
+      _products[index] = product;
     });
   }
 
