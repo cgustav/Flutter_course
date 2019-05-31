@@ -16,12 +16,12 @@ import '../../models/product.dart';
 // }
 
 class MyProductsPage extends StatelessWidget {
-  final Function addProduct;
-  final Function updateProduct;
-  final Function deleteProduct;
+  // final Function addProduct;
+  // final Function updateProduct;
+  // final Function deleteProduct;
   final List<Product> productList;
 
-  MyProductsPage(this.addProduct, this.updateProduct, this.deleteProduct, this.productList);
+  MyProductsPage(this.productList);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class MyProductsPage extends StatelessWidget {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[ProductEditTab(addProduct: addProduct,), ProductListTab(productList, updateProduct, deleteProduct)],
+            children: <Widget>[ProductEditTab(), ProductListTab(null, null,null),],
           ),
         ));
   }

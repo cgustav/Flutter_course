@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 ////
 import '../../widgets/helpers/ensure-visible.dart';
+import '../../scoped-models/products.dart';
 import '../../models/product.dart';
 
 //
@@ -40,14 +42,6 @@ class _ProductEditTabState extends State<ProductEditTab> {
 
   @override
   Widget build(BuildContext context) {
-    //Notes: About Gesture Detectors & Customized Buttons
-    //   -> It contains tons of events, it's awesome!
-    // GestureDetector(child:
-    //   Container(color:Colors.green,
-    //     padding: EdgeInsets.all(15.0),
-    //     child: Text('My Button'),),
-    // )
-
     return widget.product == null
         ? _buildPageContent()
         : Scaffold(
@@ -61,6 +55,8 @@ class _ProductEditTabState extends State<ProductEditTab> {
   //HELPERS
 
   Widget _buildPageContent() {
+      //Notes: About Gesture Detectors & Customized Buttons
+      //   -> It contains tons of events, it's awesome!
     return GestureDetector(
       onTap: () {
         //we stablish a autofocus action
@@ -183,14 +179,17 @@ class _ProductEditTabState extends State<ProductEditTab> {
   }
 
   Widget _buildSubmitButton(BuildContext context) {
-    return RaisedButton(
+    return ScopedModelDescendant<ProductModel>(builder: (BuildContext context, Widget child, ProductModel model){
+      return RaisedButton(
         child: Text('Save'),
         color: Theme.of(context).accentColor,
         textColor: Colors.white, //primary
-        onPressed: _submitForm);
+        onPressed:()=> _submitForm(model.addProduct, model.updateProduct),
+        );
+  });
   }
 
-  void _submitForm() {
+  void _submitForm(Function addProduct, Function updateProduct) {
     /* Note: About Key States
       -With the Save() method, the onSaved 
        event of every form control will be triggered

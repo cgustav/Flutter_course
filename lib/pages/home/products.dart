@@ -25,7 +25,7 @@ class ProductsPage extends StatelessWidget {
         ],
       ),
       //body: ProductManager(products),
-      body: Products(products),
+      body: Products(),
     );
   }
 }
