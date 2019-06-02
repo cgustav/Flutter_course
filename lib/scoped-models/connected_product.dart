@@ -15,14 +15,15 @@ mixin ConnectedProductsModel on Model {
   String _selProductId;
   bool _isLoading = false;
   //fetch prop
-  String _productsUrl =
-      'https://flutter-course-fe6e4.firebaseio.com/products.json';
+
 }
 
 //PRODUCT
 
 mixin ProductModel on ConnectedProductsModel {
   bool _showFavorites = false;
+  final String _productsUrl =
+      'https://flutter-course-fe6e4.firebaseio.com/products.json';
 
   //----------------------------
   //          GETTERS
@@ -73,10 +74,12 @@ mixin ProductModel on ConnectedProductsModel {
   //----------------------------
 
   Future<bool> fetchProducts() {
+    String authenticatedUrl = _productsUrl + '?auth=${_authenticated.token}';
+
     _isLoading = true;
     notifyListeners();
 
-    return http.get(_productsUrl).then<Null>((http.Response response) {
+    return http.get(authenticatedUrl).then<Null>((http.Response response) {
       _isLoading = false;
       final List<Product> fetchProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
@@ -113,6 +116,10 @@ mixin ProductModel on ConnectedProductsModel {
 
   Future<bool> addProduct(
       String title, String description, String image, double price) async {
+    String authenticatedUrl = _productsUrl + '?auth=${_authenticated.token}';
+    //   String _productsUrl =
+    // 'https://flutter-course-fe6e4.firebaseio.com/products.json';
+
     _isLoading = true;
     notifyListeners();
 
@@ -128,7 +135,7 @@ mixin ProductModel on ConnectedProductsModel {
 
     try {
       final http.Response response =
-          await http.post(_productsUrl, body: json.encode(productData));
+          await http.post(authenticatedUrl, body: json.encode(productData));
 
       final int statusCode = response.statusCode;
 
@@ -167,6 +174,8 @@ mixin ProductModel on ConnectedProductsModel {
     String updateUrl =
         'https://flutter-course-fe6e4.firebaseio.com/products/${selectedProduct.id}.json';
 
+    String authenticatedUrl = updateUrl + '?auth=${_authenticated.token}';
+
     _isLoading = true;
     notifyListeners();
 
@@ -181,7 +190,7 @@ mixin ProductModel on ConnectedProductsModel {
     };
 
     return http
-        .put(updateUrl, body: json.encode(updateData))
+        .put(authenticatedUrl, body: json.encode(updateData))
         .then((http.Response response) {
       _isLoading = false;
       final Product updatedProduct = Product(
@@ -209,14 +218,16 @@ mixin ProductModel on ConnectedProductsModel {
   Future<bool> deleteProduct() {
     String deleteUrl =
         'https://flutter-course-fe6e4.firebaseio.com/products/${selectedProduct.id}.json';
-    final deletedProductId = selectedProduct.id;
+    String authenticatedUrl = deleteUrl + '?auth=${_authenticated.token}';
+
+    //final deletedProductId = selectedProduct.id;
 
     _isLoading = true;
     _products.removeAt(selectedProductIndex);
     _selProductId = null;
     notifyListeners();
 
-    return http.delete(deleteUrl).then((http.Response response) {
+    return http.delete(authenticatedUrl).then((http.Response response) {
       _isLoading = false;
       notifyListeners();
       return true;
@@ -317,9 +328,15 @@ mixin UserModel on ConnectedProductsModel {
 
     final Map<String, dynamic> responseData = json.decode(response.body);
 
+    print(responseData.toString());
+
     if (responseData.containsKey('idToken')) {
       success = true;
       message = 'Authentication succeeded!';
+      _authenticated = User(
+          id: responseData['localId'],
+          email: email,
+          token: responseData['idToken']);
     } else {
       switch (responseData['error']['message']) {
         //LOGIN

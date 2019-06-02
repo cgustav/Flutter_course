@@ -217,14 +217,6 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
 
     _authFormKey.currentState.save();
 
-    // if (_authMode == AuthMode.LogIn) {
-    //   successInformation =
-    //       await login(_credentials['email'], _credentials['password']);
-    // } else {
-    //   successInformation =
-    //       await signUp(_credentials['email'], _credentials['password']);
-    // }
-
     successInformation = await authenticate(_credentials['email'], _credentials['password'], _authMode);
 
     print(successInformation);
