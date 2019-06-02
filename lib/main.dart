@@ -29,7 +29,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  List<Product> _products = [];
 
   @override
   Widget build(BuildContext context) {
@@ -76,18 +75,15 @@ class _MyAppState extends State<MyApp> {
 
         //Valid name route
         if (pathElements[1] == 'product') {
-          final int index = int.parse(pathElements[2]);
-          //image url
-          //title:_products[index],imageUrl:_products[index]
-          // Map<String,dynamic> item = {
-          //   'title':_products[index]['title'],
-          //   'description': _products[index]['description'],
-          //   'image': _products[index]['image'],
-          //   'price': _products[index]['price'],
-          // };
+          final String productId = pathElements[2];
+          final Product product =  model.allProducts.firstWhere((Product product){
+            return product.id == productId;
+          });
+
+          //model.selectProduct(productId);
 
           return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(index));
+              builder: (BuildContext context) => ProductPage(product));
         }
 
         //

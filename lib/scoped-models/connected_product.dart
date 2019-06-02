@@ -11,7 +11,7 @@ import '../models/user.dart';
 mixin ConnectedProductsModel on Model {
   List<Product> _products = [];
   User _authenticated;
-  int _selProductIndex;
+  String _selProductId;
   bool _isLoading = false;
   //fetch prop
   String _productsUrl =
@@ -50,7 +50,7 @@ mixin ConnectedProductsModel on Model {
           userEmail: _authenticated.email,
           userId: _authenticated.id);
       _products.add(newProduct);
-      _selProductIndex = null;
+      //_selProductIndex = null;
       notifyListeners();
     });
   }
@@ -80,20 +80,27 @@ mixin ProductModel on ConnectedProductsModel {
   }
 
   Product get selectedProduct {
-    if (_selProductIndex == null) {
+    if (selectedProductId == null) {
       return null;
     }
-    return _products[_selProductIndex];
+    return _products.firstWhere((Product product){
+      return product.id == _selProductId;
+    });
   }
 
-  int get selectedProductIndex {
-    return _selProductIndex;
+  String get selectedProductId{
+    return _selProductId;
   }
 
   bool get displayFavoritesOnly {
     return _showFavorites;
   }
 
+  int get selectedProductIndex{
+    return _products.indexWhere((Product product){
+          return product.id == _selProductId;
+      });
+  }
   //SETTERS
   //--
 
@@ -130,6 +137,7 @@ mixin ProductModel on ConnectedProductsModel {
       _products = fetchProductList;
       _isLoading = false;
       notifyListeners();
+      _selProductId = null;
     }); //end then
   }
 
@@ -139,8 +147,8 @@ mixin ProductModel on ConnectedProductsModel {
     final deletedProductId = selectedProduct.id;
 
     _isLoading = true;
-    _products.removeAt(_selProductIndex);
-    _selProductIndex = null;
+    _products.removeAt(selectedProductIndex);
+    _selProductId = null;
     notifyListeners();
 
     http.delete(deleteUrl).then((http.Response response){
@@ -180,16 +188,16 @@ mixin ProductModel on ConnectedProductsModel {
           userEmail: selectedProduct.userEmail,
           userId: selectedProduct.userId);
 
-      _products[_selProductIndex] = updatedProduct;
-      _selProductIndex = null;
+      _products[selectedProductIndex] = updatedProduct;
+      //_selProductIndex = null;
       notifyListeners();
     });
 
     ///
   }
 
-  void selectProduct(int index) {
-    _selProductIndex = index;
+  void selectProduct(String productId) {
+    _selProductId = productId;
     notifyListeners();
   }
 
@@ -203,6 +211,7 @@ mixin ProductModel on ConnectedProductsModel {
     final bool newFavoriteStatus = !isCurrentlyFavorite;
 
     final Product updatedProduct = Product(
+        id: selectedProduct.id,
         title: selectedProduct.title,
         description: selectedProduct.description,
         price: selectedProduct.price,
@@ -211,7 +220,7 @@ mixin ProductModel on ConnectedProductsModel {
         userId: selectedProduct.userId,
         isFavorite: newFavoriteStatus);
 
-    _products[_selProductIndex] = updatedProduct;
+    _products[selectedProductIndex] = updatedProduct;
 
     /* Note: About Notify Listeners
        ----------------------------
@@ -223,7 +232,7 @@ mixin ProductModel on ConnectedProductsModel {
     */
 
     notifyListeners();
-    _selProductIndex = null;
+    _selProductId = null;
   }
 }
 

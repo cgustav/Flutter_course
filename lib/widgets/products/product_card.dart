@@ -125,34 +125,34 @@ class ProductCard extends StatelessWidget {
             //Text(''),
           ),
           Text(product.userEmail),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.info),
-                color: Theme.of(context).primaryColorDark,
-                onPressed: () {
-                  Navigator.pushNamed<bool>(
-                      context, '/product/' + productIndex.toString());
-                },
-                iconSize: 30.0,
-              ),
-              ScopedModelDescendant<MainModel>(
-                builder: (BuildContext context, Widget child, MainModel model) {
-                  return IconButton(
-                    icon: Icon(model.allProducts[productIndex].isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border),
-                    color: Colors.red,
-                    onPressed: () {
-                      //FAVORITE BUTTON
-                      model.selectProduct(productIndex);
-                      model.toggleProductFavoriteStatus();
-                    },
-                  );
-                },
-              )
-            ],
+
+          ScopedModelDescendant<MainModel>(
+            builder: (BuildContext context, Widget child, MainModel model) {
+              return ButtonBar(
+                  alignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.info),
+                      color: Theme.of(context).primaryColorDark,
+                      onPressed: () {
+                        Navigator.pushNamed<bool>(
+                            context, '/product/' + model.allProducts[productIndex].id);
+                      },
+                      iconSize: 30.0,
+                    ),
+                    IconButton(
+                      icon: Icon(model.allProducts[productIndex].isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border),
+                      color: Colors.red,
+                      onPressed: () {
+                        //FAVORITE BUTTON
+                        model.selectProduct(model.allProducts[productIndex].id);
+                        model.toggleProductFavoriteStatus();
+                      },
+                    ),
+                  ]);
+            },
           ),
         ],
       ),

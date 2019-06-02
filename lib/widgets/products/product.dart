@@ -11,37 +11,44 @@ import '../../models/product.dart';
 import '../../scoped-models/main.dart';
 
 class ProductPage extends StatelessWidget {
-  final int productIndex;
+  final Product product;
 
-  ProductPage(this.productIndex);
+  ProductPage(this.product);
+
+  //ProductPage(this.productId);
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(onWillPop: () {
-      print('Back Button Pressed');
-      Navigator.pop(context, false); //we dont want to delete //customized pop
-      return Future.value(false); //to not use the default pop
-    }, child: ScopedModelDescendant<MainModel>(
-      builder: (BuildContext context, Widget child, MainModel model) {
-        final Product item =  model.allProducts[productIndex];
-
-        return Scaffold(
+    return WillPopScope(
+        onWillPop: () {
+          print('Back Button Pressed');
+          Navigator.pop(
+              context, false); //we dont want to delete //customized pop
+          return Future.value(false); //to not use the default pop
+        },
+        child: Scaffold(
           appBar: AppBar(
-            title: Text(item.title),
+            title: Text(product.title),
           ),
           body: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.network(item.image),
-              _buildProductTitle(item),
-              _buildProductPriceDetail(context, item),
-              _buildProductDescriptionDetail(item),
+              _buildProductImage(product),
+              _buildProductTitle(product),
+              _buildProductPriceDetail(context, product),
+              _buildProductDescriptionDetail(product),
             ],
           ),
-        );
-      },
-    ));
+        ));
+  }
+
+  Widget _buildProductImage(Product item) {
+    return FadeInImage(
+        placeholder: AssetImage('assets/img/food.jpg'),
+        height: 300.0,
+        fit: BoxFit.cover,
+        image: NetworkImage(item.image));
   }
 
   Widget _buildProductTitle(Product item) {

@@ -46,7 +46,7 @@ class _ProductListTabState extends State<ProductListTab> {
                 color: Colors.red,
               ),
               onDismissed: (DismissDirection direction) {
-                model.selectProduct(index);
+                model.selectProduct(model.allProducts[index].id);
                 if (direction == DismissDirection.endToStart) {
                   //print('swiped end to start');
                   model.deleteProduct();
@@ -98,7 +98,7 @@ class _ProductListTabState extends State<ProductListTab> {
     return IconButton(
       icon: Icon(Icons.edit),
       onPressed: () {
-        model.selectProduct(index);
+        model.selectProduct(model.allProducts[index].id);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return ProductEditTab();

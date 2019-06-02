@@ -44,7 +44,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
         builder: (BuildContext context, Widget child, MainModel model) {
       final Widget pageContent =
           _buildPageContent(context, model.selectedProduct);
-      return model.selectedProductIndex == null
+      return model.selectedProductIndex == -1
           ? pageContent
           : Scaffold(
               appBar: AppBar(
@@ -231,7 +231,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
     Future skipper = Navigator.pushReplacementNamed(context, '/products')
         .then((_) => setSelectedProduct(null));
 
-    if (selectedProductIndex == null) {
+    if (selectedProductIndex == -1) {
       addProduct(
         _formData['title'],
         _formData['description'],
