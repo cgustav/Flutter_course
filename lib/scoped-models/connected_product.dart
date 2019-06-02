@@ -17,7 +17,7 @@ mixin ConnectedProductsModel on Model {
   String _productsUrl =
       'https://flutter-course-fe6e4.firebaseio.com/products.json';
 
-  Future<Null> addProduct(
+  Future<bool> addProduct(
       String title, String description, String image, double price) {
     //Product newProduct;
     _isLoading = true;
@@ -37,8 +37,15 @@ mixin ConnectedProductsModel on Model {
     return http
         .post(_productsUrl, body: json.encode(productData))
         .then((http.Response response) {
-      _isLoading = false;
-      //notifyListeners();
+      final int statusCode = response.statusCode;
+
+      if (statusCode != 200 && statusCode != 201) {
+        //something bad happen
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
       final Map<String, dynamic> responseData = json.decode(response.body);
       //print(responseData);
       final Product newProduct = Product(
@@ -51,7 +58,13 @@ mixin ConnectedProductsModel on Model {
           userId: _authenticated.id);
       _products.add(newProduct);
       //_selProductIndex = null;
+      _isLoading = false;
       notifyListeners();
+      return true;
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
   }
 }
@@ -83,12 +96,12 @@ mixin ProductModel on ConnectedProductsModel {
     if (selectedProductId == null) {
       return null;
     }
-    return _products.firstWhere((Product product){
+    return _products.firstWhere((Product product) {
       return product.id == _selProductId;
     });
   }
 
-  String get selectedProductId{
+  String get selectedProductId {
     return _selProductId;
   }
 
@@ -96,21 +109,21 @@ mixin ProductModel on ConnectedProductsModel {
     return _showFavorites;
   }
 
-  int get selectedProductIndex{
-    return _products.indexWhere((Product product){
-          return product.id == _selProductId;
-      });
+  int get selectedProductIndex {
+    return _products.indexWhere((Product product) {
+      return product.id == _selProductId;
+    });
   }
   //SETTERS
   //--
 
   //METHODS
 
-  Future<Null> fetchProducts() {
+  Future<bool> fetchProducts() {
     _isLoading = true;
     notifyListeners();
 
-    return http.get(_productsUrl).then((http.Response response) {
+    return http.get(_productsUrl).then<Null>((http.Response response) {
       _isLoading = false;
       final List<Product> fetchProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
@@ -138,26 +151,14 @@ mixin ProductModel on ConnectedProductsModel {
       _isLoading = false;
       notifyListeners();
       _selProductId = null;
-    }); //end then
-  }
-
-  void deleteProduct() {
-    String deleteUrl =
-        'https://flutter-course-fe6e4.firebaseio.com/products/${selectedProduct.id}.json';
-    final deletedProductId = selectedProduct.id;
-
-    _isLoading = true;
-    _products.removeAt(selectedProductIndex);
-    _selProductId = null;
-    notifyListeners();
-
-    http.delete(deleteUrl).then((http.Response response){
-      _isLoading=false;
+    }).catchError((error) {
+      _isLoading = false;
       notifyListeners();
+      return;
     });
   }
 
-  Future<Null> updateProduct(
+  Future<bool> updateProduct(
       String title, String description, String image, double price) {
     String updateUrl =
         'https://flutter-course-fe6e4.firebaseio.com/products/${selectedProduct.id}.json';
@@ -191,9 +192,35 @@ mixin ProductModel on ConnectedProductsModel {
       _products[selectedProductIndex] = updatedProduct;
       //_selProductIndex = null;
       notifyListeners();
+      return true;
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
 
     ///
+  }
+
+  Future<bool> deleteProduct() {
+    String deleteUrl =
+        'https://flutter-course-fe6e4.firebaseio.com/products/${selectedProduct.id}.json';
+    final deletedProductId = selectedProduct.id;
+
+    _isLoading = true;
+    _products.removeAt(selectedProductIndex);
+    _selProductId = null;
+    notifyListeners();
+
+    return http.delete(deleteUrl).then((http.Response response) {
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    });
   }
 
   void selectProduct(String productId) {
