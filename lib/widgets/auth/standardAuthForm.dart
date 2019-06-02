@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 //scoped models
 import '../../scoped-models/main.dart';
+import '../../models/auth.dart';
 
-enum AuthMode { SignUp, Login }
+//enum AuthMode { SignUp, LogIn }
+
 
 class StandardAuthForm extends StatefulWidget {
   final BuildContext context;
@@ -26,7 +28,7 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
     'accept': false
   };
 
-  AuthMode _authMode = AuthMode.Login;
+  AuthMode _authMode = AuthMode.LogIn;
 
   //BUILD METHOD
   @override
@@ -173,11 +175,11 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
   Widget _buildSwitchModeButton() {
     return FlatButton(
       child:
-          Text('Switch to ${_authMode == AuthMode.Login ? 'SignUp' : 'LogIn'}'),
+          Text('Switch to ${_authMode == AuthMode.LogIn ? 'SignUp' : 'LogIn'}'),
       onPressed: () {
         setState(() {
           _authMode =
-              _authMode == AuthMode.Login ? AuthMode.SignUp : AuthMode.Login;
+              _authMode == AuthMode.LogIn ? AuthMode.SignUp : AuthMode.LogIn;
         });
       },
     );
@@ -196,7 +198,7 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
               child: Center(
                 child: Text(buttonText),
               ),
-              onPressed: () => _submitForm(model.login, model.signUp));
+              onPressed: () => _submitForm(model.authenticate));
     });
   }
 
@@ -206,7 +208,7 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
     });
   }
 
-  void _submitForm(Function login, Function signUp) async {
+  void _submitForm(Function authenticate) async {
     if (!_authFormKey.currentState.validate() || !_credentials['accept']) {
       return;
     }
@@ -215,13 +217,17 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
 
     _authFormKey.currentState.save();
 
-    if (_authMode == AuthMode.Login) {
-      successInformation =
-          await login(_credentials['email'], _credentials['password']);
-    } else {
-      successInformation =
-          await signUp(_credentials['email'], _credentials['password']);
-    }
+    // if (_authMode == AuthMode.LogIn) {
+    //   successInformation =
+    //       await login(_credentials['email'], _credentials['password']);
+    // } else {
+    //   successInformation =
+    //       await signUp(_credentials['email'], _credentials['password']);
+    // }
+
+    successInformation = await authenticate(_credentials['email'], _credentials['password'], _authMode);
+
+    print(successInformation);
 
     if (successInformation['success']) {
       Navigator.pushReplacementNamed(context, '/products');

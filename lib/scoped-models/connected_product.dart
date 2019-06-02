@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 //models
 import '../models/product.dart';
 import '../models/user.dart';
+import '../models/auth.dart';
 
 //class ConnectedProducts extends Model {
 mixin ConnectedProductsModel on Model {
@@ -279,10 +280,15 @@ mixin UserModel on ConnectedProductsModel {
   //      AUTHENTICATION METHODS
   //---------------------------------
 
-  //SIGN IN
-  Future<Map<String, dynamic>> login(String email, String password) async {
-    String signInUrl =
+  //AUTHENTICATE
+
+  Future<Map<String, dynamic>> authenticate(String email, String password,
+      [AuthMode mode = AuthMode.LogIn]) async {
+    final String signInUrl =
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiToken';
+
+    final String signUpUrl =
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=$_apiToken';
 
     _isLoading = true;
     notifyListeners();
@@ -295,21 +301,28 @@ mixin UserModel on ConnectedProductsModel {
 
     bool success = false;
     String message = 'Something went wrong!';
+    http.Response response;
 
-    print('Sign In...');
-
-    final http.Response response = await http.post(signInUrl,
-        headers: {'Content-type': 'application/json'},
-        body: json.encode(authData));
+    if (mode == AuthMode.LogIn) {
+      print('Login access');
+      response = await http.post(signInUrl,
+          headers: {'Content-type': 'application/json'},
+          body: json.encode(authData));
+    } else {
+      print('SignUp access');
+      response = await http.post(signUpUrl,
+          headers: {'Content-type': 'application/json'},
+          body: json.encode(authData));
+    }
 
     final Map<String, dynamic> responseData = json.decode(response.body);
-
 
     if (responseData.containsKey('idToken')) {
       success = true;
       message = 'Authentication succeeded!';
     } else {
       switch (responseData['error']['message']) {
+        //LOGIN
         case 'EMAIL_NOT_FOUND':
           message = 'This email was not found.';
           break;
@@ -319,48 +332,9 @@ mixin UserModel on ConnectedProductsModel {
         case 'USER_DISABLED':
           message = 'The user account has been disabled by an administrator.';
           break;
-      }
-    }
-    _isLoading = false;
-    notifyListeners();
-
-    return {'success': success, 'message': message};
-  }
-
-  //SIGNUP
-  Future<Map<String, dynamic>> signUp(String email, String password) async {
-    _isLoading = true;
-    notifyListeners();
-
-    String signUpUrl =
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=$_apiToken';
-
-    final Map<String, dynamic> authData = {
-      'email': email,
-      'password': password,
-      'returnSecureToken': true
-    };
-    bool success = false;
-    String message = 'Something went wrong!';
-
-    print('Sign Up...');
-
-    final http.Response response = await http.post(signUpUrl,
-        headers: {'Content-type': 'application/json'},
-        body: json.encode(authData));
-
-    final Map<String, dynamic> responseData = json.decode(response.body);
-
-    //print('Response from firebase.. ' + responseData.toString());
-
-    if (responseData.containsKey('idToken')) {
-      success = true;
-      message = 'Authentication succeeded!';
-    } else {
-
-      switch (responseData['error']['message']) {
+        //SIGNUP
         case 'EMAIL_EXISTS':
-          message = 'This email already exists';
+          message = 'This email already exists. Try again with another one.';
           break;
         case 'OPERATION_NOT_ALLOWED':
           message = 'Password sign-in is disabled. Try again later.';
@@ -380,7 +354,7 @@ mixin UserModel on ConnectedProductsModel {
 
     return {'success': success, 'message': message};
   }
-}
+} //END CLASS
 
 mixin UtilityModel on ConnectedProductsModel {
   bool get isLoading {
