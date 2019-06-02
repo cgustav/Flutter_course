@@ -53,6 +53,18 @@ class _ProductsPageState extends State<ProductsPage>{
 
 }
 
+    /* Notes: About RefreshIndicator
+      -----------------------------------------------
+      RefreshIndicator is a widget that provide a 
+      super easy way to trigger a pull (fetching data
+      or displaying other widget components) reload
+      functionality.
+
+      RefreshIndicator accept a Future Object in 
+      the onRefresh parameter. That Future Object 
+      will retrieve the new data asyncronously.
+
+     */
 
     Widget _buildProductList(){
     return ScopedModelDescendant(builder: (BuildContext context, Widget child, MainModel model){
@@ -64,6 +76,8 @@ class _ProductsPageState extends State<ProductsPage>{
         content = Center(child: CircularProgressIndicator(),);
       }
 
-      return content;
+      return RefreshIndicator(
+        onRefresh: model.fetchProducts,
+        child: content,);
     },);
   }
