@@ -22,64 +22,80 @@ class ProductCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.network(product.image),
+          FadeInImage(placeholder: AssetImage('assets/food.jpg'),image:NetworkImage(product.image)),
           //SizedBox(height: 50.0,child: Container(color: Colors.green,)),
           Container(
-              //NOTES: About margin
-              //->margin top && bottom
-              //  /margin:EdgeInsets.only(top: 10.0, bottom: 1.0),
-              //  /Here you can specify 'manual' margin configuration
-              //
-              //->margin symmetrical (horizontal)
-              // /margin:EdgeInsets.symmetric(horizontal: 25.0),
-              // /You can control the margin size of the container
-              // /equally (to the left & to the right)
-              //
-              //-> or symmetrical (horizontal + vertical)
-              //margin: EdgeInsets.symmetric(vertical: 18.0, horizontal: 10.1),
+
+              /* NOTE: About margin
+                ----------------------------------------------------
+                ->margin top && bottom
+                margin:EdgeInsets.only(top: 10.0, bottom: 1.0),
+                Here you can specify a 'manual' margin configuration
+              
+                ->margin symmetrical (horizontal)
+                margin:EdgeInsets.symmetric(horizontal: 25.0),
+                You can control the margin size of the container
+                equally (to the left & to the right)
+              
+                -> or symmetrical (horizontal + vertical)
+                margin: EdgeInsets.symmetric(vertical: 18.0, horizontal: 10.1),
+
+              */
 
               margin: EdgeInsets.only(top: 0.0),
 
-              //NOTES: About padding
-              //-> the same as margin settings options
-              //-> Additionaly you can use the Padding widget:
-              //    /Padding(padding: EdgeInsets.only(top: 10.0),color: Colors.green,))
+              /* NOTE: About padding
+                 ---------------------------------------------------
+                 Additionaly you can use the Padding widget:
+                 Padding(padding: EdgeInsets.only(top: 10.0),color: Colors.green,))
+              */
 
               padding: EdgeInsets.only(top: 10.0),
-              //
-              //color: Colors.green,
+
+              /* NOTE: About Alignment & Rows
+                 ---------------------------------------------------
+                 -> The MainAxisAlignment inside a row acts
+                    from the left to the right (natural row direction).
+                 -> In the case the MainAxisAlignment is being used
+                    inside a Column the alignment will start from
+                    the top to the bottom.
+              */
 
               child: Row(
-                //NOTES: About Alignment & Rows
-                // -> The MainAxisAlignment inside a row acts
-                //    from the left to the right (natural row direction)
-                // -> In the case the MainAxisAlignment is being used
-                //    inside a Column the alignment will start from
-                //    the top to the bottom
+                
                 mainAxisAlignment: MainAxisAlignment.center,
 
-                //NOTES: About Alignment & CrossAxisAlignment
-                // -> It is designed to be the completely opposite to
-                //    the MainAxisAlignment property effect.
-                //crossAxisAlignment: CrossAxisAlignment.center,
+                /* NOTE: About Alignment & CrossAxisAlignment
+                   -----------------------------------------------
+                   -> It is designed to be the completely opposite 
+                      to the MainAxisAlignment property effect.
+
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                */
+
+                /* NOTE: About Expanded Widget
+                   -----------------------------------------------
+                   -> It gives the widget which it wraps as much
+                      space in the row or column you're using it
+                      as possible.
+                */
 
                 children: <Widget>[
-                  //NOTES: About Expanded Widget
-                  // -> It gives the widget which it wraps as much
-                  //    space in the row or column you're using it
-                  //    as possible.
+
                   TitleDefault(product.title),
                   SizedBox(
                     width: 8.0,
                   ),
                   /* NOTES: About Box Decoration 
-                   *  The BoxDecoration class provides a variety of ways to draw a box.
-                   *  The box has a border, a body, and may cast a boxShadow.
-                   * 
-                   *  The body of the box is painted in layers. The bottom-most layer 
-                   *  is the color, which fills the box. Above that is the gradient, 
-                   *  which also fills the box. Finally there is the image, the precise 
-                   *  alignment of which is controlled by the DecorationImage class.
+                     -----------------------------------------------
+                     The BoxDecoration class provides a variety of ways to draw a box.
+                     The box has a border, a body, and may cast a boxShadow.
+                    
+                     The body of the box is painted in layers. The bottom-most layer 
+                     is the color, which fills the box. Above that is the gradient, 
+                     which also fills the box. Finally there is the image, the precise 
+                     alignment of which is controlled by the DecorationImage class.
+                     
                    */
                   Container(
                     padding:
