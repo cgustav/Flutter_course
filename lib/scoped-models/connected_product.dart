@@ -28,6 +28,7 @@ mixin ProductModel on ConnectedProductsModel {
   //----------------------------
   //          GETTERS
   //----------------------------
+  
   List<Product> get allProducts {
     //to not return a pointer to the same
     //object in memory (a new List)

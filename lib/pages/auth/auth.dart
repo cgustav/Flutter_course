@@ -31,25 +31,7 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  void _setEmail(String email) {
-    setState(() {
-      _email = email;
-    });
-    //print('Email is :' + _email);
-  }
-
-  void _setPassword(String password) {
-    setState(() {
-      _password = password;
-    });
-    //print('Password is :' + _password);
-  }
-
-  void _switchTerms(bool value) {
-    setState(() {
-      _acceptTerms = value;
-    });
-  }
+  
 
   void _submittion(BuildContext context) {
     final Map<String, dynamic> credentials = {
