@@ -139,13 +139,11 @@ mixin ProductModel on ConnectedProductsModel {
 
     _isLoading = true;
     _products.removeAt(_selProductIndex);
+    _selProductIndex = null;
     notifyListeners();
 
     http.delete(deleteUrl).then((http.Response response){
       _isLoading=false;
-
-      _selProductIndex = null;
-      //fetchProducts();
       notifyListeners();
     });
   }
