@@ -1,4 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 
 //models
 import '../models/product.dart';
@@ -8,21 +11,41 @@ import '../models/user.dart';
 mixin ConnectedProductsModel on Model {
   List<Product> _products = [];
   User _authenticated;
-
   int _selProductIndex;
+  String _productsUrl =
+      'https://flutter-course-fe6e4.firebaseio.com/products.json';
 
   void addProduct(
       String title, String description, String image, double price) {
-    final Product newProduct = Product(
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        userEmail: _authenticated.email,
-        userId: _authenticated.id);
+    //Product newProduct;
+    final Map<String, dynamic> productData = {
+      'title': title,
+      'description': description,
+      'image':
+          'http://as01.epimg.net/deporteyvida/imagenes/2018/05/07/portada/1525714597_852564_1525714718_noticia_normal.jpg',
+      'price': price,
+      'userEmail': _authenticated.email,
+      'userId': _authenticated.id,
+    };
 
-    _products.add(newProduct);
-    _selProductIndex = null;
+    print('sending request to firebase...');
+    http
+        .post(_productsUrl, body: json.encode(productData))
+        .then((http.Response response) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      //print(responseData);
+      final Product newProduct = Product(
+          id: responseData['name'],
+          title: title,
+          description: description,
+          image: image,
+          price: price,
+          userEmail: _authenticated.email,
+          userId: _authenticated.id);
+      _products.add(newProduct);
+      _selProductIndex = null;
+    });
+
     notifyListeners();
   }
 }
@@ -69,11 +92,32 @@ mixin ProductModel on ConnectedProductsModel {
   //--
 
   //METHODS
-  // void addProduct(Product product) {
-  //   _products.add(product);
-  //   _selectedProductIndex = null;
-  //   notifyListeners();
-  // }
+
+  void fetchProducts() {
+    http.get(_productsUrl).then((http.Response response) {
+      final List<Product> fetchProductList = [];
+      final Map<String, Map<String, dynamic>> productListData =
+          json.decode(response.body);
+
+      productListData
+          .forEach((String productId, Map<String, dynamic> productData) {
+        //tumbaya
+        final Product product = Product(
+            id: productId,
+            title: productData['title'],
+            description: productData['description'],
+            image: productData['image'],
+            userEmail: productData['userEmail'],
+            userId: productData['userId'],
+            price: double.parse(productData['price']));
+
+        fetchProductList.add(product);
+      });
+
+      _products = fetchProductList;
+      notifyListeners();
+    }); //end then
+  }
 
   void deleteProduct() {
     _products.removeAt(_selProductIndex);

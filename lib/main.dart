@@ -28,14 +28,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  //List<Map<String, dynamic>> _products = [];
+
   List<Product> _products = [];
-  
 
   @override
   Widget build(BuildContext context) {
+    //model
+    final MainModel model =  MainModel();
+
     return ScopedModel<MainModel>(
-      model: MainModel(),
+      model: model,
       child:MaterialApp(
       //debugShowMaterialGrid: true,
       theme: ThemeData(
@@ -55,7 +57,7 @@ class _MyAppState extends State<MyApp> {
           return AuthPage();
         },
         '/products': (BuildContext context) {
-          return ProductsPage(_products);
+          return ProductsPage(model);
         },
         '/myproducts': (BuildContext context) {
           return MyProductsPage(_products);
@@ -99,7 +101,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialPageRoute(
             builder: (BuildContext context) =>
                 //ProductsPage(_products, _addProduct, _deleteProduct));
-                ProductsPage(_products));
+                ProductsPage(model));
       },
     ),);
     

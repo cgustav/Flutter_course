@@ -10,10 +10,24 @@ import '../../models/product.dart';
 //scoped models
 import '../../scoped-models/main.dart';
 
-class ProductsPage extends StatelessWidget {
-  final List<Product> products;
+class ProductsPage extends StatefulWidget {
+  final MainModel model;
 
-  ProductsPage(this.products);
+  ProductsPage(this.model);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ProductsPageState();
+  }
+}
+
+class _ProductsPageState extends State<ProductsPage>{
+
+  @override
+  void initState() {
+    widget.model.fetchProducts();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
