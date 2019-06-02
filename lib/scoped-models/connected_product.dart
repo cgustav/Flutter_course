@@ -17,6 +17,102 @@ mixin ConnectedProductsModel on Model {
   String _productsUrl =
       'https://flutter-course-fe6e4.firebaseio.com/products.json';
 
+  
+}
+
+//PRODUCT
+
+mixin ProductModel on ConnectedProductsModel {
+  bool _showFavorites = false;
+
+  //----------------------------
+  //          GETTERS
+  //----------------------------
+  List<Product> get allProducts {
+    //to not return a pointer to the same
+    //object in memory (a new List)
+    //this avoid the model._products.add(new Product(...))
+    return List.from(_products);
+  }
+
+  List<Product> get displayedProducts {
+    //A list with all favorites _products
+    //the where method returns a new List by default
+    //so we dont have to instance a new List Object
+    if (_showFavorites) {
+      return _products.where((Product item) => item.isFavorite).toList();
+    }
+    return List.from(_products);
+  }
+
+  Product get selectedProduct {
+    if (selectedProductId == null) {
+      return null;
+    }
+    return _products.firstWhere((Product product) {
+      return product.id == _selProductId;
+    });
+  }
+
+  String get selectedProductId {
+    return _selProductId;
+  }
+
+  bool get displayFavoritesOnly {
+    return _showFavorites;
+  }
+
+  int get selectedProductIndex {
+    return _products.indexWhere((Product product) {
+      return product.id == _selProductId;
+    });
+  }
+
+
+  //----------------------------
+  //          METHODS
+  //----------------------------
+
+  Future<bool> fetchProducts() {
+    _isLoading = true;
+    notifyListeners();
+
+    return http.get(_productsUrl).then<Null>((http.Response response) {
+      _isLoading = false;
+      final List<Product> fetchProductList = [];
+      final Map<String, dynamic> productListData = json.decode(response.body);
+
+      if (productListData == null) {
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      productListData.forEach((String productId, dynamic productData) {
+        final Product product = Product(
+            id: productId,
+            title: productData['title'],
+            description: productData['description'],
+            image: productData['image'],
+            userEmail: productData['userEmail'],
+            userId: productData['userId'].toString(),
+            price: productData['price']);
+
+        fetchProductList.add(product);
+      });
+
+      _products = fetchProductList;
+      _isLoading = false;
+      notifyListeners();
+      _selProductId = null;
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return;
+    });
+  }
+
+
   Future<bool> addProduct(
       String title, String description, String image, double price) async {
     _isLoading = true;
@@ -69,96 +165,7 @@ mixin ConnectedProductsModel on Model {
     }
 
   }
-}
 
-//PRODUCT
-
-mixin ProductModel on ConnectedProductsModel {
-  bool _showFavorites = false;
-
-  //GETTERS
-  List<Product> get allProducts {
-    //to not return a pointer to the same
-    //object in memory (a new List)
-    //this avoid the model._products.add(new Product(...))
-    return List.from(_products);
-  }
-
-  List<Product> get displayedProducts {
-    //A list with all favorites _products
-    //the where method returns a new List by default
-    //so we dont have to instance a new List Object
-    if (_showFavorites) {
-      return _products.where((Product item) => item.isFavorite).toList();
-    }
-    return List.from(_products);
-  }
-
-  Product get selectedProduct {
-    if (selectedProductId == null) {
-      return null;
-    }
-    return _products.firstWhere((Product product) {
-      return product.id == _selProductId;
-    });
-  }
-
-  String get selectedProductId {
-    return _selProductId;
-  }
-
-  bool get displayFavoritesOnly {
-    return _showFavorites;
-  }
-
-  int get selectedProductIndex {
-    return _products.indexWhere((Product product) {
-      return product.id == _selProductId;
-    });
-  }
-  //SETTERS
-  //--
-
-  //METHODS
-
-  Future<bool> fetchProducts() {
-    _isLoading = true;
-    notifyListeners();
-
-    return http.get(_productsUrl).then<Null>((http.Response response) {
-      _isLoading = false;
-      final List<Product> fetchProductList = [];
-      final Map<String, dynamic> productListData = json.decode(response.body);
-
-      if (productListData == null) {
-        _isLoading = false;
-        notifyListeners();
-        return;
-      }
-
-      productListData.forEach((String productId, dynamic productData) {
-        final Product product = Product(
-            id: productId,
-            title: productData['title'],
-            description: productData['description'],
-            image: productData['image'],
-            userEmail: productData['userEmail'],
-            userId: productData['userId'].toString(),
-            price: productData['price']);
-
-        fetchProductList.add(product);
-      });
-
-      _products = fetchProductList;
-      _isLoading = false;
-      notifyListeners();
-      _selProductId = null;
-    }).catchError((error) {
-      _isLoading = false;
-      notifyListeners();
-      return;
-    });
-  }
 
   Future<bool> updateProduct(
       String title, String description, String image, double price) {
@@ -224,6 +231,10 @@ mixin ProductModel on ConnectedProductsModel {
       return false;
     });
   }
+
+  //----------------------------
+  //          HELPERS
+  //----------------------------
 
   void selectProduct(String productId) {
     _selProductId = productId;
