@@ -33,7 +33,7 @@ class ProductPage extends StatelessWidget {
             //mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(item.image),
+              Image.network(item.image),
               _buildProductTitle(item),
               _buildProductPriceDetail(context, item),
               _buildProductDescriptionDetail(item),

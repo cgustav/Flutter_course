@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
           return ProductsPage(model);
         },
         '/myproducts': (BuildContext context) {
-          return MyProductsPage(_products);
+          return MyProductsPage(model);
         }
       },
       //exception

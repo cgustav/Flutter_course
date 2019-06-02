@@ -7,13 +7,13 @@ import '../myproducts/product_list.dart';
 
 //models
 import '../../models/product.dart';
+import '../../scoped-models/main.dart';
 
 
 class MyProductsPage extends StatelessWidget {
-
-  final List<Product> productList;
-
-  MyProductsPage(this.productList);
+  final MainModel model;
+  //final List<Product> productList;
+  MyProductsPage(this.model);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class MyProductsPage extends StatelessWidget {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[ProductEditTab(), ProductListTab(),],
+            children: <Widget>[ProductEditTab(), ProductListTab(model),],
           ),
         ));
   }

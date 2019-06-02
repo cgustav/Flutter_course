@@ -53,7 +53,6 @@ mixin ConnectedProductsModel on Model {
       _selProductIndex = null;
       notifyListeners();
     });
-
   }
 }
 
@@ -108,10 +107,10 @@ mixin ProductModel on ConnectedProductsModel {
       final List<Product> fetchProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
 
-      if(productListData == null){
-          _isLoading =  false;
-          notifyListeners();
-          return;
+      if (productListData == null) {
+        _isLoading = false;
+        notifyListeners();
+        return;
       }
 
       productListData.forEach((String productId, dynamic productData) {
@@ -134,24 +133,60 @@ mixin ProductModel on ConnectedProductsModel {
   }
 
   void deleteProduct() {
+    String deleteUrl =
+        'https://flutter-course-fe6e4.firebaseio.com/products/${selectedProduct.id}.json';
+    final deletedProductId = selectedProduct.id;
+
+    _isLoading = true;
     _products.removeAt(_selProductIndex);
-    _selProductIndex = null;
     notifyListeners();
+
+    http.delete(deleteUrl).then((http.Response response){
+      _isLoading=false;
+
+      _selProductIndex = null;
+      //fetchProducts();
+      notifyListeners();
+    });
   }
 
-  void updateProduct(
+  Future<Null> updateProduct(
       String title, String description, String image, double price) {
-    final Product updatedProduct = Product(
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        userEmail: selectedProduct.userEmail,
-        userId: selectedProduct.userId);
+    String updateUrl =
+        'https://flutter-course-fe6e4.firebaseio.com/products/${selectedProduct.id}.json';
 
-    _products[_selProductIndex] = updatedProduct;
-    _selProductIndex = null;
-    //notifyListeners();
+    _isLoading = true;
+    notifyListeners();
+
+    final Map<String, dynamic> updateData = {
+      'title': title,
+      'description': description,
+      'image':
+          'http://as01.epimg.net/deporteyvida/imagenes/2018/05/07/portada/1525714597_852564_1525714718_noticia_normal.jpg',
+      'price': price,
+      'userEmail': selectedProduct.userEmail,
+      'userId': selectedProduct.userId
+    };
+
+    return http
+        .put(updateUrl, body: json.encode(updateData))
+        .then((http.Response response) {
+      _isLoading = false;
+      final Product updatedProduct = Product(
+          id: selectedProduct.id,
+          title: title,
+          description: description,
+          image: image,
+          price: price,
+          userEmail: selectedProduct.userEmail,
+          userId: selectedProduct.userId);
+
+      _products[_selProductIndex] = updatedProduct;
+      _selProductIndex = null;
+      notifyListeners();
+    });
+
+    ///
   }
 
   void selectProduct(int index) {

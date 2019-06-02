@@ -8,10 +8,28 @@ import '../../models/product.dart';
 //scope models
 //import '../../scoped-models/products.dart';
 import '../../scoped-models/main.dart';
+//import '';
 
-class ProductListTab extends StatelessWidget {
+class ProductListTab extends StatefulWidget {
+  final MainModel model;
 
-  ProductListTab();
+  ProductListTab(this.model);
+
+  @override
+  State<StatefulWidget> createState() {
+
+    return _ProductListTabState();
+  }
+}
+
+class _ProductListTabState extends State<ProductListTab> {
+
+
+  @override
+  void initState() {
+    widget.model.fetchProducts();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +55,7 @@ class ProductListTab extends StatelessWidget {
                 } else {
                   //print('Other swiping');
                 }
-                //print('-------------');
-                //print('-------------');
-                //print('-------------');
-                //
+
               },
               child: Column(
                 children: <Widget>[
