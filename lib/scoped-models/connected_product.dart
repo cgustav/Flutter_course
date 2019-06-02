@@ -18,8 +18,7 @@ mixin ConnectedProductsModel on Model {
       'https://flutter-course-fe6e4.firebaseio.com/products.json';
 
   Future<bool> addProduct(
-      String title, String description, String image, double price) {
-    //Product newProduct;
+      String title, String description, String image, double price) async {
     _isLoading = true;
     notifyListeners();
 
@@ -33,21 +32,20 @@ mixin ConnectedProductsModel on Model {
       'userId': _authenticated.id,
     };
 
-    //print('sending request to firebase...');
-    return http
-        .post(_productsUrl, body: json.encode(productData))
-        .then((http.Response response) {
+    try {
+      final http.Response response =
+          await http.post(_productsUrl, body: json.encode(productData));
+
       final int statusCode = response.statusCode;
 
       if (statusCode != 200 && statusCode != 201) {
-        //something bad happen
         _isLoading = false;
         notifyListeners();
         return false;
       }
 
       final Map<String, dynamic> responseData = json.decode(response.body);
-      //print(responseData);
+
       final Product newProduct = Product(
           id: responseData['name'],
           title: title,
@@ -56,16 +54,20 @@ mixin ConnectedProductsModel on Model {
           price: price,
           userEmail: _authenticated.email,
           userId: _authenticated.id);
+
       _products.add(newProduct);
-      //_selProductIndex = null;
+
       _isLoading = false;
       notifyListeners();
       return true;
-    }).catchError((error) {
+      
+    } catch (error) {
+      //print(error);
       _isLoading = false;
       notifyListeners();
       return false;
-    });
+    }
+
   }
 }
 
