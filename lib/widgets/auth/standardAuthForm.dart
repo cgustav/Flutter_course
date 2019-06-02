@@ -66,7 +66,6 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
                     //_authMode == AuthMode.SignUp ?
                     _authMode == AuthMode.SignUp ? _buildConfirmPasswordInput():Container(),
                       
-
                     _buildSwitchTile(),
                     SizedBox(
                       height: 10.0,
@@ -199,7 +198,8 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
           child: Center(
             child: Text(text),
           ),
-          onPressed: () => _submitForm(model.login));
+          onPressed: () => _submitForm(model.login, model.signUp)
+          );
     });
   }
 
@@ -209,16 +209,26 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
     });
   }
 
-  void _submitForm(Function login) {
+  void _submitForm(Function login, Function signUp) async {
     if (!_authFormKey.currentState.validate() || !_credentials['accept']) {
       return;
     }
 
-    print('Authenticating...');
+    Map<String,dynamic> successInformation;
+
+    //print('Authenticating...');
     _authFormKey.currentState.save();
 
-    login(_credentials['email'], _credentials['password']);
+    if(_authMode == AuthMode.Login){
+      successInformation = await login(_credentials['email'], _credentials['password']);
+    }else{
+      successInformation = await signUp(_credentials['email'], _credentials['password']);
+    }
 
-    Navigator.pushReplacementNamed(context, '/products');
+    if(successInformation['success']){
+      Navigator.pushReplacementNamed(context, '/products');
+    }
+
+    
   }
 }

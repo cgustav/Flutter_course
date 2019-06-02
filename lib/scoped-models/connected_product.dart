@@ -16,8 +16,6 @@ mixin ConnectedProductsModel on Model {
   //fetch prop
   String _productsUrl =
       'https://flutter-course-fe6e4.firebaseio.com/products.json';
-
-  
 }
 
 //PRODUCT
@@ -28,7 +26,7 @@ mixin ProductModel on ConnectedProductsModel {
   //----------------------------
   //          GETTERS
   //----------------------------
-  
+
   List<Product> get allProducts {
     //to not return a pointer to the same
     //object in memory (a new List)
@@ -68,7 +66,6 @@ mixin ProductModel on ConnectedProductsModel {
       return product.id == _selProductId;
     });
   }
-
 
   //----------------------------
   //          METHODS
@@ -113,7 +110,6 @@ mixin ProductModel on ConnectedProductsModel {
     });
   }
 
-
   Future<bool> addProduct(
       String title, String description, String image, double price) async {
     _isLoading = true;
@@ -157,16 +153,13 @@ mixin ProductModel on ConnectedProductsModel {
       _isLoading = false;
       notifyListeners();
       return true;
-      
     } catch (error) {
       //print(error);
       _isLoading = false;
       notifyListeners();
       return false;
     }
-
   }
-
 
   Future<bool> updateProduct(
       String title, String description, String image, double price) {
@@ -286,6 +279,34 @@ mixin UserModel on ConnectedProductsModel {
     //print('logeando dentro de la clase...');
     //print('email:' + _authenticated.email.toString());
     //print('password:' + _authenticated.password.toString());
+  }
+
+  //AUTHENTICATION
+  //SIGNUP
+  Future<Map<String, dynamic>> signUp(String email, String password) async {
+    String customToken = 'AIzaSyB3yMiTBCqFs-5Sfq1zYyryFpSO50mfrAI';
+    String authApiUrl =
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=$customToken';
+    final Map<String, dynamic> authData = {
+      'email': email,
+      'password': password,
+      'returnSecureToken': true
+    };
+    print('Sign Up...');
+    print(authApiUrl);
+    final http.Response response = await http.post(authApiUrl,
+        headers: {'Content-type': 'application/json'},
+        body: json.encode(authData));
+
+    final int statusCode = response.statusCode;
+
+    print('Response from firebase.. ' + json.decode(response.body).toString());
+
+    if (statusCode != 200 && statusCode != 201) {
+      return {'success': false, 'message': 'Authentication failed!'};
+    }
+
+    return {'success': true, 'message': 'Authentication succeded!'};
   }
 }
 
