@@ -273,40 +273,112 @@ mixin ProductModel on ConnectedProductsModel {
 //USERS
 
 mixin UserModel on ConnectedProductsModel {
-  void login(String email, String password) {
-    _authenticated =
-        User(id: 'ee8aldk-20019a-fff82711', email: email, password: password);
-    //print('logeando dentro de la clase...');
-    //print('email:' + _authenticated.email.toString());
-    //print('password:' + _authenticated.password.toString());
-  }
+  final String _apiToken = 'AIzaSyB3yMiTBCqFs-5Sfq1zYyryFpSO50mfrAI';
 
-  //AUTHENTICATION
-  //SIGNUP
-  Future<Map<String, dynamic>> signUp(String email, String password) async {
-    String customToken = 'AIzaSyB3yMiTBCqFs-5Sfq1zYyryFpSO50mfrAI';
-    String authApiUrl =
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=$customToken';
+  //---------------------------------
+  //      AUTHENTICATION METHODS
+  //---------------------------------
+
+  //SIGN IN
+  Future<Map<String, dynamic>> login(String email, String password) async {
+    String signInUrl =
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiToken';
+
+    _isLoading = true;
+    notifyListeners();
+
     final Map<String, dynamic> authData = {
       'email': email,
       'password': password,
       'returnSecureToken': true
     };
-    print('Sign Up...');
-    print(authApiUrl);
-    final http.Response response = await http.post(authApiUrl,
+
+    bool success = false;
+    String message = 'Something went wrong!';
+
+    print('Sign In...');
+
+    final http.Response response = await http.post(signInUrl,
         headers: {'Content-type': 'application/json'},
         body: json.encode(authData));
 
-    final int statusCode = response.statusCode;
+    final Map<String, dynamic> responseData = json.decode(response.body);
 
-    print('Response from firebase.. ' + json.decode(response.body).toString());
 
-    if (statusCode != 200 && statusCode != 201) {
-      return {'success': false, 'message': 'Authentication failed!'};
+    if (responseData.containsKey('idToken')) {
+      success = true;
+      message = 'Authentication succeeded!';
+    } else {
+      switch (responseData['error']['message']) {
+        case 'EMAIL_NOT_FOUND':
+          message = 'This email was not found.';
+          break;
+        case 'INVALID_PASSWORD':
+          message = 'The password is invalid.';
+          break;
+        case 'USER_DISABLED':
+          message = 'The user account has been disabled by an administrator.';
+          break;
+      }
+    }
+    _isLoading = false;
+    notifyListeners();
+
+    return {'success': success, 'message': message};
+  }
+
+  //SIGNUP
+  Future<Map<String, dynamic>> signUp(String email, String password) async {
+    _isLoading = true;
+    notifyListeners();
+
+    String signUpUrl =
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=$_apiToken';
+
+    final Map<String, dynamic> authData = {
+      'email': email,
+      'password': password,
+      'returnSecureToken': true
+    };
+    bool success = false;
+    String message = 'Something went wrong!';
+
+    print('Sign Up...');
+
+    final http.Response response = await http.post(signUpUrl,
+        headers: {'Content-type': 'application/json'},
+        body: json.encode(authData));
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
+
+    //print('Response from firebase.. ' + responseData.toString());
+
+    if (responseData.containsKey('idToken')) {
+      success = true;
+      message = 'Authentication succeeded!';
+    } else {
+
+      switch (responseData['error']['message']) {
+        case 'EMAIL_EXISTS':
+          message = 'This email already exists';
+          break;
+        case 'OPERATION_NOT_ALLOWED':
+          message = 'Password sign-in is disabled. Try again later.';
+          break;
+        case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+          message =
+              'We have blocked all requests from this device due to unusual activity. Try again later.';
+          break;
+        case 'WEAK_PASSWORD':
+          message = 'Password should be at least 6 characters';
+          break;
+      }
     }
 
-    return {'success': true, 'message': 'Authentication succeded!'};
+    _isLoading = false;
+    notifyListeners();
+
+    return {'success': success, 'message': message};
   }
 }
 
