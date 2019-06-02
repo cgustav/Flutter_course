@@ -47,7 +47,23 @@ class _ProductsPageState extends State<ProductsPage>{
         ],
       ),
       //body: ProductManager(products),
-      body: Products(),
+      body: _buildProductList(),
     );
   }
+
 }
+
+
+    Widget _buildProductList(){
+    return ScopedModelDescendant(builder: (BuildContext context, Widget child, MainModel model){
+      Widget content = Center(child: Text('No products found :('),);
+
+      if(model.displayedProducts.length >0 && !model.isLoading){
+        content =  Products();
+      }else if(model.isLoading){
+        content = Center(child: CircularProgressIndicator(),);
+      }
+
+      return content;
+    },);
+  }

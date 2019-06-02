@@ -49,7 +49,7 @@ class ProductListTab extends StatelessWidget {
                         width: 40.0,
                         height: 40.0,
                         child: CircleAvatar(
-                          backgroundImage: AssetImage(
+                          backgroundImage: NetworkImage(
                             productList[index].image,
                           ),
                         )),

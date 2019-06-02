@@ -12,12 +12,17 @@ mixin ConnectedProductsModel on Model {
   List<Product> _products = [];
   User _authenticated;
   int _selProductIndex;
+  bool _isLoading = false;
+  //fetch prop
   String _productsUrl =
       'https://flutter-course-fe6e4.firebaseio.com/products.json';
 
-  void addProduct(
+  Future<Null> addProduct(
       String title, String description, String image, double price) {
     //Product newProduct;
+    _isLoading = true;
+    notifyListeners();
+
     final Map<String, dynamic> productData = {
       'title': title,
       'description': description,
@@ -28,10 +33,12 @@ mixin ConnectedProductsModel on Model {
       'userId': _authenticated.id,
     };
 
-    print('sending request to firebase...');
-    http
+    //print('sending request to firebase...');
+    return http
         .post(_productsUrl, body: json.encode(productData))
         .then((http.Response response) {
+      _isLoading = false;
+      //notifyListeners();
       final Map<String, dynamic> responseData = json.decode(response.body);
       //print(responseData);
       final Product newProduct = Product(
@@ -44,9 +51,9 @@ mixin ConnectedProductsModel on Model {
           userId: _authenticated.id);
       _products.add(newProduct);
       _selProductIndex = null;
+      notifyListeners();
     });
 
-    notifyListeners();
   }
 }
 
@@ -94,27 +101,34 @@ mixin ProductModel on ConnectedProductsModel {
   //METHODS
 
   void fetchProducts() {
+    _isLoading = true;
+    notifyListeners();
     http.get(_productsUrl).then((http.Response response) {
+      _isLoading = false;
       final List<Product> fetchProductList = [];
-      final Map<String, Map<String, dynamic>> productListData =
-          json.decode(response.body);
+      final Map<String, dynamic> productListData = json.decode(response.body);
 
-      productListData
-          .forEach((String productId, Map<String, dynamic> productData) {
-        //tumbaya
+      if(productListData == null){
+          _isLoading =  false;
+          notifyListeners();
+          return;
+      }
+
+      productListData.forEach((String productId, dynamic productData) {
         final Product product = Product(
             id: productId,
             title: productData['title'],
             description: productData['description'],
             image: productData['image'],
             userEmail: productData['userEmail'],
-            userId: productData['userId'],
-            price: double.parse(productData['price']));
+            userId: productData['userId'].toString(),
+            price: productData['price']);
 
         fetchProductList.add(product);
       });
 
       _products = fetchProductList;
+      _isLoading = false;
       notifyListeners();
     }); //end then
   }
@@ -185,8 +199,14 @@ mixin UserModel on ConnectedProductsModel {
   void login(String email, String password) {
     _authenticated =
         User(id: 'ee8aldk-20019a-fff82711', email: email, password: password);
-    print('logeando dentro de la clase...');
-    print('email:' + _authenticated.email.toString());
-    print('password:' + _authenticated.password.toString());
+    //print('logeando dentro de la clase...');
+    //print('email:' + _authenticated.email.toString());
+    //print('password:' + _authenticated.password.toString());
+  }
+}
+
+mixin UtilityModel on ConnectedProductsModel {
+  bool get isLoading {
+    return _isLoading;
   }
 }

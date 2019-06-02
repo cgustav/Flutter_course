@@ -25,7 +25,8 @@ class _ProductEditTabState extends State<ProductEditTab> {
     'title': null,
     'description': null,
     'price': null,
-    'image': 'assets/img/food.jpg'
+    'image':
+        'http://as01.epimg.net/deporteyvida/imagenes/2018/05/07/portada/1525714597_852564_1525714718_noticia_normal.jpg'
   };
   final _titleFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
@@ -122,78 +123,91 @@ class _ProductEditTabState extends State<ProductEditTab> {
 
     return EnsureVisibleWhenFocused(
       focusNode: _titleFocusNode,
-      child: Container(child: TextFormField(
-        focusNode: _titleFocusNode,
-        decoration: InputDecoration(labelText: 'Product title'),
-        initialValue: product == null ? '' : product.title,
-        validator: (String value) {
-          //if(value.trim().length <= 0){
-          if (value.isEmpty || value.trim().length < 3) {
-            return 'Title is required and should be 3+ characters long.';
-          }
-        },
-        onSaved: (String value) {
-          _formData['title'] = value;
-        },
-      ),),
+      child: Container(
+        child: TextFormField(
+          focusNode: _titleFocusNode,
+          decoration: InputDecoration(labelText: 'Product title'),
+          initialValue: product == null ? '' : product.title,
+          validator: (String value) {
+            //if(value.trim().length <= 0){
+            if (value.isEmpty || value.trim().length < 3) {
+              return 'Title is required and should be 3+ characters long.';
+            }
+          },
+          onSaved: (String value) {
+            _formData['title'] = value;
+          },
+        ),
+      ),
     );
   }
 
   Widget _buildDescriptionTextField(Product product) {
     return EnsureVisibleWhenFocused(
         focusNode: _descriptionFocusNode,
-        child: Container(child: TextFormField(
-          focusNode: _descriptionFocusNode,
-          maxLines: 4,
-          decoration: InputDecoration(labelText: 'Product description'),
-          initialValue: product == null ? '' : product.description,
-          validator: (String value) {
-            if (value.isEmpty || value.trim().length < 5) {
-              return 'Description is required and should be 5+ characters long.';
-            }
-          },
-          onSaved: (String value) {
-            _formData['description'] = value;
-          },
-        ),));
+        child: Container(
+          child: TextFormField(
+            focusNode: _descriptionFocusNode,
+            maxLines: 4,
+            decoration: InputDecoration(labelText: 'Product description'),
+            initialValue: product == null ? '' : product.description,
+            validator: (String value) {
+              if (value.isEmpty || value.trim().length < 5) {
+                return 'Description is required and should be 5+ characters long.';
+              }
+            },
+            onSaved: (String value) {
+              _formData['description'] = value;
+            },
+          ),
+        ));
   }
 
   Widget _buildPriceTextField(Product product) {
     return EnsureVisibleWhenFocused(
         focusNode: _priceFocusNode,
-        child: Container(child: TextFormField(
-          focusNode: _priceFocusNode,
-          decoration: InputDecoration(labelText: 'Product price'),
-          keyboardType: TextInputType.number,
-          initialValue: product == null ? '' : product.price.toString(),
-          validator: (String value) {
-            if (value.isEmpty ||
-                !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
-              return 'Price is required and should be a number.';
-            }
-          },
-          onSaved: (String value) {
-            _formData['price'] = double.parse(value);
-          },
-        ),));
+        child: Container(
+          child: TextFormField(
+            focusNode: _priceFocusNode,
+            decoration: InputDecoration(labelText: 'Product price'),
+            keyboardType: TextInputType.number,
+            initialValue: product == null ? '' : product.price.toString(),
+            validator: (String value) {
+              if (value.isEmpty ||
+                  !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
+                return 'Price is required and should be a number.';
+              }
+            },
+            onSaved: (String value) {
+              _formData['price'] = double.parse(value);
+            },
+          ),
+        ));
   }
 
   Widget _buildSubmitButton(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
-      return RaisedButton(
-        child: Text('Save'),
-        color: Theme.of(context).accentColor,
-        textColor: Colors.white, //primary
-        onPressed: () => _submitForm(
-            model.addProduct, model.updateProduct, model.selectProduct, model.selectedProductIndex),
-      );
+      return model.isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : RaisedButton(
+              child: Text('Save'),
+              color: Theme.of(context).accentColor,
+              textColor: Colors.white, //primary
+              onPressed: () => _submitForm(
+                  model.addProduct,
+                  model.updateProduct,
+                  model.selectProduct,
+                  model.selectedProductIndex),
+            );
     });
   }
 
-  void _submitForm(Function addProduct, Function updateProduct, Function setSelectedProduct,
+  void _submitForm(
+      Function addProduct, Function updateProduct, Function setSelectedProduct,
       [int selectedProductIndex]) {
-
     /* Note: About Key States
        ---------------------------------------------
       -With the Save() method, the onSaved 
@@ -212,8 +226,10 @@ class _ProductEditTabState extends State<ProductEditTab> {
     if (!_formKey.currentState.validate()) {
       return;
     }
-
     _formKey.currentState.save();
+
+    Future skipper = Navigator.pushReplacementNamed(context, '/products')
+        .then((_) => setSelectedProduct(null));
 
     if (selectedProductIndex == null) {
       addProduct(
@@ -221,7 +237,7 @@ class _ProductEditTabState extends State<ProductEditTab> {
         _formData['description'],
         _formData['image'],
         _formData['price'],
-      );
+      ).then((_) => skipper);
     } else {
       updateProduct(
         _formData['title'],
@@ -230,8 +246,6 @@ class _ProductEditTabState extends State<ProductEditTab> {
         _formData['price'],
       );
     }
-
-    Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
   }
 
   //END HELPERS
