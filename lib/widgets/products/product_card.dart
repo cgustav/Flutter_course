@@ -22,7 +22,11 @@ class ProductCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          FadeInImage(placeholder: AssetImage('assets/food.jpg'),image:NetworkImage(product.image)),
+          FadeInImage(
+              placeholder: AssetImage('assets/img/food.jpg'),
+              height: 300.0,
+              fit: BoxFit.cover,
+              image: NetworkImage(product.image)),
           //SizedBox(height: 50.0,child: Container(color: Colors.green,)),
           Container(
 
@@ -62,7 +66,6 @@ class ProductCard extends StatelessWidget {
               */
 
               child: Row(
-                
                 mainAxisAlignment: MainAxisAlignment.center,
 
                 /* NOTE: About Alignment & CrossAxisAlignment
@@ -81,11 +84,11 @@ class ProductCard extends StatelessWidget {
                 */
 
                 children: <Widget>[
-
                   TitleDefault(product.title),
                   SizedBox(
                     width: 8.0,
                   ),
+
                   /* NOTES: About Box Decoration 
                      -----------------------------------------------
                      The BoxDecoration class provides a variety of ways to draw a box.
@@ -95,7 +98,7 @@ class ProductCard extends StatelessWidget {
                      is the color, which fills the box. Above that is the gradient, 
                      which also fills the box. Finally there is the image, the precise 
                      alignment of which is controlled by the DecorationImage class.
-                     
+
                    */
                   Container(
                     padding:
@@ -135,16 +138,16 @@ class ProductCard extends StatelessWidget {
                 iconSize: 30.0,
               ),
               ScopedModelDescendant<MainModel>(
-                builder:
-                    (BuildContext context, Widget child, MainModel model) {
+                builder: (BuildContext context, Widget child, MainModel model) {
                   return IconButton(
-                    icon: Icon(model.allProducts[productIndex].isFavorite ? Icons.favorite : Icons.favorite_border),
+                    icon: Icon(model.allProducts[productIndex].isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border),
                     color: Colors.red,
                     onPressed: () {
                       //FAVORITE BUTTON
                       model.selectProduct(productIndex);
                       model.toggleProductFavoriteStatus();
-
                     },
                   );
                 },
