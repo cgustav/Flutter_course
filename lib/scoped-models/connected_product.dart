@@ -2,6 +2,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 //models
 import '../models/product.dart';
@@ -287,6 +288,11 @@ mixin ProductModel on ConnectedProductsModel {
 mixin UserModel on ConnectedProductsModel {
   final String _apiToken = 'AIzaSyB3yMiTBCqFs-5Sfq1zYyryFpSO50mfrAI';
 
+  //GETTERS
+  User get user {
+    return _authenticated;
+  }
+
   //---------------------------------
   //      AUTHENTICATION METHODS
   //---------------------------------
@@ -337,6 +343,13 @@ mixin UserModel on ConnectedProductsModel {
           id: responseData['localId'],
           email: email,
           token: responseData['idToken']);
+
+      //Storing data in device using shared_preferences
+      //This is an asynchronous action
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', responseData['idToken']);
+      await prefs.setString('userId', responseData['localId']);
+      await prefs.setString('userEmail', email);
     } else {
       switch (responseData['error']['message']) {
         //LOGIN
@@ -370,6 +383,30 @@ mixin UserModel on ConnectedProductsModel {
     notifyListeners();
 
     return {'success': success, 'message': message};
+  }
+
+  void autoAuthenticate() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token');
+
+    if (token != null) {
+      final String userId = prefs.getString('userId');
+      final String userEmail = prefs.getString('userEmail');
+
+      _authenticated = User(id: userId, email: userEmail, token: token);
+      notifyListeners();
+    }
+  }
+
+  void logOut() async {
+    //I want to clear my authenticated user
+    //and clean my local storage
+    _authenticated = null;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.clear();
+    prefs.remove('token');
+    prefs.remove('userId');
+    prefs.remove('userEmail');
   }
 } //END CLASS
 

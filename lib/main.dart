@@ -9,8 +9,8 @@ import './pages/home/products.dart';
 import './pages/myproducts/myproducts.dart';
 import './widgets/products/product.dart';
 import './models/product.dart';
+
 //scoped
-//import './scoped-models/products.dart';
 import './scoped-models/main.dart';
 
 void main() {
@@ -28,15 +28,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final MainModel _model =  MainModel();
 
+  @override
+  void initState() {
+    _model.autoAuthenticate();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    //model
-    final MainModel model =  MainModel();
 
     return ScopedModel<MainModel>(
-      model: model,
+      model: _model,
       child:MaterialApp(
       //debugShowMaterialGrid: true,
       theme: ThemeData(
@@ -44,7 +48,6 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.deepOrange,
           accentColor: Colors.redAccent,
           buttonColor: Colors.amber,
-          //buttonTheme: ButtonThemeData(textTheme: TextTheme())
           ),
           
       //home: AuthPage(),
@@ -52,14 +55,13 @@ class _MyAppState extends State<MyApp> {
         //Later you can use the specified named routes with 
         //PushNamed & PushReplacementNamed to navigate through
         //APP views just using a simple string
-        '/': (BuildContext context) {
-          return AuthPage();
-        },
+        '/': (BuildContext context)=>  _model.user == null ? AuthPage(): ProductsPage(_model)
+        ,
         '/products': (BuildContext context) {
-          return ProductsPage(model);
+          return ProductsPage(_model);
         },
         '/myproducts': (BuildContext context) {
-          return MyProductsPage(model);
+          return MyProductsPage(_model);
         }
       },
       //exception
@@ -76,7 +78,7 @@ class _MyAppState extends State<MyApp> {
         //Valid name route
         if (pathElements[1] == 'product') {
           final String productId = pathElements[2];
-          final Product product =  model.allProducts.firstWhere((Product product){
+          final Product product =  _model.allProducts.firstWhere((Product product){
             return product.id == productId;
           });
 
@@ -97,7 +99,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialPageRoute(
             builder: (BuildContext context) =>
                 //ProductsPage(_products, _addProduct, _deleteProduct));
-                ProductsPage(model));
+                ProductsPage(_model));
       },
     ),);
     
