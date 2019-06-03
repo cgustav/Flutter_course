@@ -430,27 +430,24 @@ mixin UserModel on ConnectedProductsModel {
   void logOut() async {
     print('logOut');
     //I want to clear my authenticated user
-    //and clean my local storage
+    //Clean my local storage
+    //Set to false to my isAuthenticated state 
+
     _authenticated = null;
     _authTimer.cancel();
+    _userSubject.add(false);
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     //prefs.clear();
     prefs.remove('token');
     prefs.remove('userId');
     prefs.remove('userEmail');
-
-    //Not emmiting anything
-    _userSubject.add(false);
-
   }
 
   void setAuthTimeout(int time){
-    _authTimer = Timer(Duration(milliseconds: time), (){
-      logOut();
-      _userSubject.add(false);
-    });
+    _authTimer = Timer(Duration(milliseconds: time), logOut);
   }
+  
 } //END CLASS
 
 mixin UtilityModel on ConnectedProductsModel {

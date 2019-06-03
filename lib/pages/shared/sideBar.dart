@@ -81,14 +81,14 @@ class SideBar extends StatelessWidget {
   }
 
   Widget _buildLogoutTile(BuildContext context) {
-    ScopedModelDescendant(
+    return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
         return ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
           onTap: () {
             model.logOut();
-            Navigator.of(context).pushReplacementNamed('/');
+            //Navigator.of(context).pushReplacementNamed('/');
           },
         );
       },

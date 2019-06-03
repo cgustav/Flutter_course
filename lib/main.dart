@@ -99,7 +99,6 @@ class _MyAppState extends State<MyApp> {
             return product.id == productId;
           });
 
-          //model.selectProduct(productId);
 
           return MaterialPageRoute<bool>(
               builder: (BuildContext context) => !_isAuthenticated ? AuthPage(): ProductPage(product));
