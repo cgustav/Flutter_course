@@ -46,7 +46,7 @@ class SideBar extends StatelessWidget {
     return ListTile(
         title: Text('Home'),
         leading: Icon(Icons.home),
-        onTap: () => Navigator.of(context).pushNamed('/products'));
+        onTap: () => Navigator.of(context).pushNamed('/'));
   }
 
   Widget _buildMyProductsTile(BuildContext context) {

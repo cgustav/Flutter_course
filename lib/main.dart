@@ -29,10 +29,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MainModel _model =  MainModel();
+  bool _isAuthenticated = false;
 
   @override
   void initState() {
     _model.autoAuthenticate();
+    _model.userSubject.listen((bool isAuthenticated){
+      setState(() {
+        _isAuthenticated = isAuthenticated;
+      });
+    });
     super.initState();
   }
 
@@ -55,17 +61,28 @@ class _MyAppState extends State<MyApp> {
         //Later you can use the specified named routes with 
         //PushNamed & PushReplacementNamed to navigate through
         //APP views just using a simple string
-        '/': (BuildContext context)=>  _model.user == null ? AuthPage(): ProductsPage(_model)
+        '/': (BuildContext context)=>  !_isAuthenticated ? AuthPage(): ProductsPage(_model)
         ,
-        '/products': (BuildContext context) {
-          return ProductsPage(_model);
-        },
-        '/myproducts': (BuildContext context) {
-          return MyProductsPage(_model);
-        }
+        // '/products': (BuildContext context) {
+        //   return ProductsPage(_model);
+        // },
+        '/myproducts': (BuildContext context) => !_isAuthenticated ? AuthPage(): MyProductsPage(_model),
+
       },
       //exception
       onGenerateRoute: (RouteSettings settings) {
+
+        /* NOTES: About onGenerateRoute 
+           ------------------------------------------------
+           The check at the beginning of onGenerateRoute 
+           only catches new navigation actions, not routes
+           which were already loaded.
+        */
+
+        if(!_isAuthenticated){
+          return MaterialPageRoute<bool>(builder: (BuildContext context)=>AuthPage(),);
+        }
+
         //This allow us to pass arguments through name routes
         //for example /product/1
         final List<String> pathElements = settings.name.split('/');
@@ -85,7 +102,7 @@ class _MyAppState extends State<MyApp> {
           //model.selectProduct(productId);
 
           return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(product));
+              builder: (BuildContext context) => !_isAuthenticated ? AuthPage(): ProductPage(product));
         }
 
         //
@@ -99,7 +116,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialPageRoute(
             builder: (BuildContext context) =>
                 //ProductsPage(_products, _addProduct, _deleteProduct));
-                ProductsPage(_model));
+                !_isAuthenticated ? AuthPage(): ProductsPage(_model));
       },
     ),);
     

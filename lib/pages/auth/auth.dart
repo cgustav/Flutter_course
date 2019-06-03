@@ -41,6 +41,6 @@ class _AuthPageState extends State<AuthPage> {
 
     print('Acepta terminos? :' + _acceptTerms.toString());
     print('Authenticating... ' + credentials.toString());
-    Navigator.pushReplacementNamed(context, '/products');
+    //Navigator.pushReplacementNamed(context, '/');
   }
 }

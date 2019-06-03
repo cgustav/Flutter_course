@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rxdart/subjects.dart';
 
 //models
 import '../models/product.dart';
@@ -287,10 +288,16 @@ mixin ProductModel on ConnectedProductsModel {
 
 mixin UserModel on ConnectedProductsModel {
   final String _apiToken = 'AIzaSyB3yMiTBCqFs-5Sfq1zYyryFpSO50mfrAI';
+  Timer _authTimer;
+  PublishSubject<bool> _userSubject = PublishSubject();
 
   //GETTERS
   User get user {
     return _authenticated;
+  }
+
+  PublishSubject<bool> get userSubject{
+    return _userSubject;
   }
 
   //---------------------------------
@@ -344,12 +351,20 @@ mixin UserModel on ConnectedProductsModel {
           email: email,
           token: responseData['idToken']);
 
+      //AUTO LOGOUT
+      setAuthTimeout(int.parse(responseData['expiresIn']));
+      //set isAuthenticated state
+      _userSubject.add(true);
+      //expiration date variables
+      final DateTime now = DateTime.now();
+      final DateTime expiryTime = now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
       //Storing data in device using shared_preferences
       //This is an asynchronous action
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', responseData['idToken']);
       await prefs.setString('userId', responseData['localId']);
       await prefs.setString('userEmail', email);
+      await prefs.setString('expiryTime', expiryTime.toIso8601String());
     } else {
       switch (responseData['error']['message']) {
         //LOGIN
@@ -388,25 +403,53 @@ mixin UserModel on ConnectedProductsModel {
   void autoAuthenticate() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
+    final String spiryTimeString = prefs.getString('expiryTime');
 
     if (token != null) {
+      final DateTime now = DateTime.now();
+      final DateTime parsedExpiryTime = DateTime.parse(spiryTimeString);
+
+      if(parsedExpiryTime.isBefore(now)){
+        //expired token
+        _authenticated = null;
+        notifyListeners();
+        return;
+      }
+
       final String userId = prefs.getString('userId');
       final String userEmail = prefs.getString('userEmail');
-
+      final int tokenLifespan =  parsedExpiryTime.difference(now).inSeconds;
+      _userSubject.add(true);
       _authenticated = User(id: userId, email: userEmail, token: token);
+      //Set Auto logout timer (until the token is expired)
+      setAuthTimeout(tokenLifespan);
       notifyListeners();
     }
   }
 
   void logOut() async {
+    print('logOut');
     //I want to clear my authenticated user
     //and clean my local storage
     _authenticated = null;
+    _authTimer.cancel();
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     //prefs.clear();
     prefs.remove('token');
     prefs.remove('userId');
     prefs.remove('userEmail');
+
+    //Not emmiting anything
+    _userSubject.add(false);
+
+  }
+
+  void setAuthTimeout(int time){
+    _authTimer = Timer(Duration(milliseconds: time), (){
+      logOut();
+      _userSubject.add(false);
+    });
   }
 } //END CLASS
 
