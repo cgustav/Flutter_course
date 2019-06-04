@@ -27,7 +27,7 @@ class _ProductListTabState extends State<ProductListTab> {
 
   @override
   void initState() {
-    widget.model.fetchProducts();
+    widget.model.fetchProducts(onlyForUser: true);
     super.initState();
   }
 

@@ -75,7 +75,7 @@ mixin ProductModel on ConnectedProductsModel {
   //          METHODS
   //----------------------------
 
-  Future<bool> fetchProducts() {
+  Future<bool> fetchProducts({bool onlyForUser = false}) {
     String authenticatedUrl = _productsUrl + '?auth=${_authenticated.token}';
 
     _isLoading = true;
@@ -109,7 +109,15 @@ mixin ProductModel on ConnectedProductsModel {
         fetchProductList.add(product);
       });
 
-      _products = fetchProductList;
+      if (onlyForUser) {
+        _products = fetchProductList.where((Product product){
+              return product.userId == _authenticated.id;
+            }).toList();
+      }else{
+        _products = fetchProductList;
+      }
+      
+
       _isLoading = false;
       notifyListeners();
       _selProductId = null;
