@@ -3,7 +3,6 @@ import 'package:scoped_model/scoped_model.dart';
 //import 'package:flutter/rendering.dart';
 
 //local
-//import './product_manager.dart';
 import './pages/auth/auth.dart';
 import './pages/home/products.dart';
 import './pages/myproducts/myproducts.dart';
@@ -55,12 +54,16 @@ class _MyAppState extends State<MyApp> {
           accentColor: Colors.redAccent,
           buttonColor: Colors.amber,
           ),
-          
-      //home: AuthPage(),
       routes: {
-        //Later you can use the specified named routes with 
-        //PushNamed & PushReplacementNamed to navigate through
-        //APP views just using a simple string
+
+        /* NOTES: About Named Routes
+           ----------------------------------------------------
+           Later you can use the specified named routes with 
+           PushNamed & PushReplacementNamed to navigate through
+           APP views just using a simple string.
+
+        */
+        
         '/': (BuildContext context)=>  !_isAuthenticated ? AuthPage(): ProductsPage(_model)
         ,
         // '/products': (BuildContext context) {
@@ -72,7 +75,7 @@ class _MyAppState extends State<MyApp> {
       //exception
       onGenerateRoute: (RouteSettings settings) {
 
-        /* NOTES: About onGenerateRoute 
+        /* NOTES: About onGenerateRoute property 
            ------------------------------------------------
            The check at the beginning of onGenerateRoute 
            only catches new navigation actions, not routes
@@ -114,7 +117,6 @@ class _MyAppState extends State<MyApp> {
 
         return MaterialPageRoute(
             builder: (BuildContext context) =>
-                //ProductsPage(_products, _addProduct, _deleteProduct));
                 !_isAuthenticated ? AuthPage(): ProductsPage(_model));
       },
     ),);

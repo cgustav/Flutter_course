@@ -86,6 +86,8 @@ mixin ProductModel on ConnectedProductsModel {
       final List<Product> fetchProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
 
+      print(productListData);
+
       if (productListData == null) {
         _isLoading = false;
         notifyListeners();
@@ -100,7 +102,9 @@ mixin ProductModel on ConnectedProductsModel {
             image: productData['image'],
             userEmail: productData['userEmail'],
             userId: productData['userId'].toString(),
-            price: productData['price']);
+            price: productData['price'],
+            isFavorite: productData['wishList'] == null ? false : (productData['wishList'] as Map<String, dynamic>).containsKey(_authenticated.id)
+            );
 
         fetchProductList.add(product);
       });
@@ -254,10 +258,26 @@ mixin ProductModel on ConnectedProductsModel {
     notifyListeners();
   }
 
-  void toggleProductFavoriteStatus() {
+  /* Note: About Notify Listeners
+       ----------------------------
+       We call this function which is provided by 
+       the scope model package, which will essentialy
+       update all scope's model listeners, so they will
+       re-render the ScopeModelDescendant Widget and all
+       it's wrapped content.
+  */
+
+  void toggleProductFavoriteStatus() async {
     final bool isCurrentlyFavorite = selectedProduct.isFavorite;
     final bool newFavoriteStatus = !isCurrentlyFavorite;
+    final String baseUrl =
+        'https://flutter-course-fe6e4.firebaseio.com/products';
 
+    String favoriteUrl = baseUrl +
+        '/${selectedProduct.id}/wishList/${_authenticated.id}.json?auth=${_authenticated.token}';
+    http.Response response;
+
+    //OPTIMISTIC UPDATING
     final Product updatedProduct = Product(
         id: selectedProduct.id,
         title: selectedProduct.title,
@@ -269,17 +289,31 @@ mixin ProductModel on ConnectedProductsModel {
         isFavorite: newFavoriteStatus);
 
     _products[selectedProductIndex] = updatedProduct;
-
-    /* Note: About Notify Listeners
-       ----------------------------
-       We call this function which is provided by 
-       the scope model package, which will essentialy
-       update all scope's model listeners, so they will
-       re-render the ScopeModelDescendant Widget and all
-       it's wrapped content.
-    */
-
     notifyListeners();
+
+    if (newFavoriteStatus) {
+      response = await http.put(favoriteUrl, body: json.encode(true));
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        //OPTIMISTIC UPDATING ROLLBACK
+        final Product updatedProduct = Product(
+            id: selectedProduct.id,
+            title: selectedProduct.title,
+            description: selectedProduct.description,
+            price: selectedProduct.price,
+            image: selectedProduct.image,
+            userEmail: selectedProduct.userEmail,
+            userId: selectedProduct.userId,
+            isFavorite: !newFavoriteStatus);
+
+        _products[selectedProductIndex] = updatedProduct;
+        notifyListeners();
+      }
+    } else {
+      //'Unlike' on database
+      response = await http.delete(favoriteUrl);
+    }
+
     _selProductId = null;
   }
 }
@@ -296,7 +330,7 @@ mixin UserModel on ConnectedProductsModel {
     return _authenticated;
   }
 
-  PublishSubject<bool> get userSubject{
+  PublishSubject<bool> get userSubject {
     return _userSubject;
   }
 
@@ -357,7 +391,8 @@ mixin UserModel on ConnectedProductsModel {
       _userSubject.add(true);
       //expiration date variables
       final DateTime now = DateTime.now();
-      final DateTime expiryTime = now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      final DateTime expiryTime =
+          now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
       //Storing data in device using shared_preferences
       //This is an asynchronous action
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -409,7 +444,7 @@ mixin UserModel on ConnectedProductsModel {
       final DateTime now = DateTime.now();
       final DateTime parsedExpiryTime = DateTime.parse(spiryTimeString);
 
-      if(parsedExpiryTime.isBefore(now)){
+      if (parsedExpiryTime.isBefore(now)) {
         //expired token
         _authenticated = null;
         notifyListeners();
@@ -418,7 +453,7 @@ mixin UserModel on ConnectedProductsModel {
 
       final String userId = prefs.getString('userId');
       final String userEmail = prefs.getString('userEmail');
-      final int tokenLifespan =  parsedExpiryTime.difference(now).inSeconds;
+      final int tokenLifespan = parsedExpiryTime.difference(now).inSeconds;
       _userSubject.add(true);
       _authenticated = User(id: userId, email: userEmail, token: token);
       //Set Auto logout timer (until the token is expired)
@@ -431,23 +466,22 @@ mixin UserModel on ConnectedProductsModel {
     print('logOut');
     //I want to clear my authenticated user
     //Clean my local storage
-    //Set to false to my isAuthenticated state 
+    //Set to false to my isAuthenticated state
 
     _authenticated = null;
     _authTimer.cancel();
     _userSubject.add(false);
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    //prefs.clear();
+    // or prefs.clear();
     prefs.remove('token');
     prefs.remove('userId');
     prefs.remove('userEmail');
   }
 
-  void setAuthTimeout(int time){
-    _authTimer = Timer(Duration(milliseconds: time), logOut);
+  void setAuthTimeout(int time) {
+    _authTimer = Timer(Duration(seconds: time), logOut);
   }
-  
 } //END CLASS
 
 mixin UtilityModel on ConnectedProductsModel {
