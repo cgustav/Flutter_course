@@ -103,20 +103,21 @@ mixin ProductModel on ConnectedProductsModel {
             userEmail: productData['userEmail'],
             userId: productData['userId'].toString(),
             price: productData['price'],
-            isFavorite: productData['wishList'] == null ? false : (productData['wishList'] as Map<String, dynamic>).containsKey(_authenticated.id)
-            );
+            isFavorite: productData['wishList'] == null
+                ? false
+                : (productData['wishList'] as Map<String, dynamic>)
+                    .containsKey(_authenticated.id));
 
         fetchProductList.add(product);
       });
 
       if (onlyForUser) {
-        _products = fetchProductList.where((Product product){
-              return product.userId == _authenticated.id;
-            }).toList();
-      }else{
+        _products = fetchProductList.where((Product product) {
+          return product.userId == _authenticated.id;
+        }).toList();
+      } else {
         _products = fetchProductList;
       }
-      
 
       _isLoading = false;
       notifyListeners();
@@ -327,6 +328,37 @@ mixin ProductModel on ConnectedProductsModel {
 }
 
 //USERS
+
+/* NOTES: About RxDart 
+   -----------------------------------------
+   RxDart is a package which allows you to
+   handle (async) data streams (i.e send
+   events and listen to them).
+   It can be combined with ScopedModel to
+   update the UI efficiently.
+
+ */
+
+/* NOTES: About Tokens
+   -----------------------------------------
+  -> In mobile apps, you typically use tokens
+     (JWT) to authenticate users as the server
+     doesn't store the connected clientes (REST
+     API are serverless and they are the most 
+     popular way to structure a service to 
+     provide data to applications!).
+     You're not Using Sessions as you might be
+     used to from web development.
+
+  -> Logging the user out simply means clearing
+     the local user data and token. 
+*/
+
+/* NOTES: About LogIn and LogOut
+   ---------------------------------------
+  -> Tokens are attached to outgoing requests
+     to protected resources.
+*/
 
 mixin UserModel on ConnectedProductsModel {
   final String _apiToken = 'AIzaSyB3yMiTBCqFs-5Sfq1zYyryFpSO50mfrAI';
