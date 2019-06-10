@@ -17,14 +17,11 @@ class ProductListTab extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-
     return _ProductListTabState();
   }
 }
 
 class _ProductListTabState extends State<ProductListTab> {
-
-
   @override
   void initState() {
     widget.model.fetchProducts(onlyForUser: true);
@@ -55,7 +52,6 @@ class _ProductListTabState extends State<ProductListTab> {
                 } else {
                   //print('Other swiping');
                 }
-
               },
               child: Column(
                 children: <Widget>[
@@ -91,8 +87,7 @@ class _ProductListTabState extends State<ProductListTab> {
 
   //HELPERS
 
-  Widget _showEditIconButton(
-      BuildContext context, int index, MainModel model) {
+  Widget _showEditIconButton(BuildContext context, int index, MainModel model) {
     // return ScopedModelDescendant<ProductModel>(
     //   builder: (BuildContext context, Widget child, ProductModel model) {
     return IconButton(
@@ -102,10 +97,7 @@ class _ProductListTabState extends State<ProductListTab> {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return ProductEditTab();
-        }))
-        .then((_)=>{
-          model.selectProduct(null)
-        });
+        })).then((_) => {model.selectProduct(null)});
       },
     );
     //   },

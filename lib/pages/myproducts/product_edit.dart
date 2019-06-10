@@ -7,8 +7,10 @@ import '../../widgets/helpers/ensure-visible.dart';
 //models
 import '../../models/product.dart';
 //scoped models
-//import '../../scoped-models/products.dart';
 import '../../scoped-models/main.dart';
+//widgets
+import '../../widgets/form_inputs/location.dart';
+
 
 //
 class ProductEditTab extends StatefulWidget {
@@ -86,6 +88,10 @@ class _ProductEditTabState extends State<ProductEditTab> {
                 //Price field
                 _buildPriceTextField(product),
                 //Separator
+                SizedBox(
+                  height: 10.0,
+                ),
+                LocationInput(),
                 SizedBox(
                   height: 10.0,
                 ),

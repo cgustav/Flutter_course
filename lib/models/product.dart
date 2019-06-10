@@ -10,8 +10,8 @@ class Product {
   final String userEmail;
   final String userId;
 
-  Product({
-      @required this.id,
+  Product(
+      {@required this.id,
       @required this.title,
       @required this.description,
       @required this.price,

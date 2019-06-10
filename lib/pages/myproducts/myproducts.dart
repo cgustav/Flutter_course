@@ -9,7 +9,6 @@ import '../myproducts/product_list.dart';
 import '../../models/product.dart';
 import '../../scoped-models/main.dart';
 
-
 class MyProductsPage extends StatelessWidget {
   final MainModel model;
   //final List<Product> productList;
@@ -37,7 +36,10 @@ class MyProductsPage extends StatelessWidget {
             ),
           ),
           body: TabBarView(
-            children: <Widget>[ProductEditTab(), ProductListTab(model),],
+            children: <Widget>[
+              ProductEditTab(),
+              ProductListTab(model),
+            ],
           ),
         ));
   }

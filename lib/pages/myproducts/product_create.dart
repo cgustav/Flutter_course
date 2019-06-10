@@ -44,9 +44,9 @@
 //       },
 //       child: Container(
 //         margin: EdgeInsets.all(10.0),
-//         /* NOTE: About Forms 
+//         /* NOTE: About Forms
 //        - Forms are actually invisible widgets
-//        - Forms allow us to manage operations like 
+//        - Forms allow us to manage operations like
 //          validations, text input controls, and so on.
 //        - The key attribute is some kind of global
 //          identifier that allow us to access this
@@ -90,10 +90,10 @@
 //      */
 
 //     /* NOTE: About Validator
-//       - There is a special argument called we 
-//         can pass in called validator inside a TextFormField 
+//       - There is a special argument called we
+//         can pass in called validator inside a TextFormField
 //         that allows our app to inspect what the client put
-//         inside a certain form control. 
+//         inside a certain form control.
 //         Which means, a simply validation mechanism.
 //       - The argument returned from validator built function
 //         will be the error message (if there is exists one).
@@ -155,17 +155,17 @@
 
 //   void _submitForm() {
 //     /* Note: About Key States
-//       -With the Save() method, the onSaved 
+//       -With the Save() method, the onSaved
 //        event of every form control will be triggered
-//        Also, the state of the widget will be setted 
+//        Also, the state of the widget will be setted
 //        to saved.
-//       -With the Validate() method, will call the 
-//        methods inside the validator attributes on all 
+//       -With the Validate() method, will call the
+//        methods inside the validator attributes on all
 //        inputs which are wrapped by the Form widget.
-//        The validate methos will return true if 
+//        The validate methos will return true if
 //        every control pass the validator attr
 //        or return false if is not.
-      
+
 //     */
 
 //     if (!_formKey.currentState.validate()) {

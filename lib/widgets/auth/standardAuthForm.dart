@@ -6,7 +6,6 @@ import '../../models/auth.dart';
 
 //enum AuthMode { SignUp, LogIn }
 
-
 class StandardAuthForm extends StatefulWidget {
   final BuildContext context;
 
@@ -217,7 +216,8 @@ class _StandardAuthFormState extends State<StandardAuthForm> {
 
     _authFormKey.currentState.save();
 
-    successInformation = await authenticate(_credentials['email'], _credentials['password'], _authMode);
+    successInformation = await authenticate(
+        _credentials['email'], _credentials['password'], _authMode);
 
     print(successInformation);
 

@@ -11,9 +11,7 @@ class TitleDefault extends StatelessWidget {
       title,
       textAlign: TextAlign.center,
       style: TextStyle(
-          fontSize: 26.0, 
-          fontWeight: FontWeight.bold, 
-          fontFamily: 'Exo2'),
+          fontSize: 26.0, fontWeight: FontWeight.bold, fontFamily: 'Exo2'),
     );
   }
 }

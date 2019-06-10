@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 //local imports
 import '../../widgets/auth/standardAuthForm.dart';
 
-
-
 class AuthPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -19,7 +17,6 @@ class _AuthPageState extends State<AuthPage> {
   bool _acceptTerms = false;
   //Map<String,dynamic> _authenticated;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +27,6 @@ class _AuthPageState extends State<AuthPage> {
       body: StandardAuthForm(context),
     );
   }
-
-  
 
   void _submittion(BuildContext context) {
     final Map<String, dynamic> credentials = {
