@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:map_view/map_view.dart';
 //import 'package:flutter/rendering.dart';
 
 //local
@@ -16,6 +17,8 @@ void main() {
   //debugPaintSizeEnabled = true;
   //debugPaintBaselinesEnabled = true;
   //debugPaintPointersEnabled = true;
+  /* Setting Maps API Key as soon as possible. */
+  MapView.setApiKey('AIzaSyDTusXn2VboYjdgtHTHZgpXbv3FmVnb9Kg');
   runApp(MyApp());
 }
 
@@ -66,9 +69,6 @@ class _MyAppState extends State<MyApp> {
         
         '/': (BuildContext context)=>  !_isAuthenticated ? AuthPage(): ProductsPage(_model)
         ,
-        // '/products': (BuildContext context) {
-        //   return ProductsPage(_model);
-        // },
         '/myproducts': (BuildContext context) => !_isAuthenticated ? AuthPage(): MyProductsPage(_model),
 
       },
@@ -119,7 +119,9 @@ class _MyAppState extends State<MyApp> {
             builder: (BuildContext context) =>
                 !_isAuthenticated ? AuthPage(): ProductsPage(_model));
       },
-    ),);
+    ),
+    
+    );
     
 
     
@@ -127,3 +129,4 @@ class _MyAppState extends State<MyApp> {
 
 
 }
+
