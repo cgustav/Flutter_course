@@ -11,7 +11,6 @@ import '../../scoped-models/main.dart';
 //widgets
 import '../../widgets/form_inputs/location.dart';
 
-
 //
 class ProductEditTab extends StatefulWidget {
   //Without constructor
